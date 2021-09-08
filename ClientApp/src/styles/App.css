@@ -48,16 +48,44 @@ h2{
 .body{
   width: 100%;
   height: 100vh;
-  background-color: rgb(15, 15, 16);
+  background-color: #FAFAFA;
   font-family: 'Raleway', sans-serif;
   -webkit-font-smoothing: subpixel-antialiased;
   text-rendering: optimizeLegibility;
 }
 
-.projects{
-  max-width: 995px;
+.navItems {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 900;
+  color: black;
+  transition: color 0.3s ease 0s;
+}
+
+.navBar {
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  max-width: 800px;
   margin: 0px auto;
-  padding: 40px 15px;
+  padding: 18px 28px;
+  gap: 20px;
+  backdrop-filter: saturate(100%) blur(10px);
+  position: fixed;
+  inset: 2% 0% auto;
+  background-color: rgba(0, 0, 0, 0.07);
+  z-index: 4;
+  border-radius: 5px;
+}
+
+.projects{
+  max-width: 800px;
+  margin: 0px auto;
+  padding: 180px 15px;
   background-size: cover;
 }
 
@@ -73,9 +101,9 @@ h2{
 }
 
 .caption{
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 60px;
-  color: #ffffff;
+  color: black;
   font-weight: 400;
   opacity: 0.8;
   text-align: left;
@@ -93,7 +121,6 @@ h2{
 }
 
 #git{
-  color: #f093fb;
   text-decoration: none;
   transition: 0.25s ease;
 }
@@ -136,6 +163,17 @@ h2{
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   margin-top: -22px;
+}
+
+.logo {
+  float:left;
+  user-select: none;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin-top: -22px;
+  margin-left: 30px;
 }
 
 #g{
@@ -323,6 +361,16 @@ img{
 
 }
 
+.logoText{
+  text-align: left;
+  display: block;
+  font-size: 22px;
+  font-weight: 900;
+  margin-top: 10px;
+  color: rgb(15, 15, 16);
+  position: relative;
+}
+
 .contact{
   text-align: left;
   display: block;
@@ -343,11 +391,20 @@ img{
 
 #text{
   -webkit-text-fill-color: transparent;
-  text-transform: lowercase;
-  background-image: linear-gradient(to right, #f093fb 0%, #f5576c 100%);
+  background-image: linear-gradient(to right, #ff8317 0%, #f5576c 100%);
   -webkit-background-clip: text;
   word-wrap: break-word;
   cursor: auto;
+  font-weight: 900;
+}
+
+#text2{
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(to right, #fac33c 0%, #ff991c 100%);
+  -webkit-background-clip: text;
+  word-wrap: break-word;
+  cursor: auto;
+  font-weight: 900;
 }
 
 #color{
@@ -429,7 +486,7 @@ p{
   font-weight: 900;
   line-height: 1;
   text-align: left;
-  font-size: 6.4rem;
+  font-size: 5rem;
   -webkit-background-clip: text;
   margin-block-start: 0.67em;
   margin-block-end: 0.17em;
