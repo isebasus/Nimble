@@ -123,10 +123,9 @@ export class Designer extends React.Component {
             <a class="navItems">Order</a>
           </nav>
 
-          <h1 className="first">The easiest way to create merch.<a id="text"></a></h1>
+          <h1 className="first">Made Simple.<a id="text"></a></h1>
           <h2 className="caption">Not your average t-shirt maker. Made for <a id="git" href="https://github.com/isebasus/"><a id="text">Creators</a></a> &amp; <a id="res" href="https://drive.google.com/file/d/1IxqVpsvz8np6-Xaz1NG8KTiRZsLrbzxF/view?usp=sharing"><a id="text2">Artists</a></a> like you.  </h2>
-          <div className="columns">
-          </div>
+          <a class="button">Make some Merch</a>
         </div>
       </header>
     )
