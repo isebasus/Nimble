@@ -1,15 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
-import qwertyVideo from '../src/videos/qwertyVideo.mp4';
-import FoodVideo from '../src/videos/foodBanks.mp4';
-import pongVideo from '../src/videos/pongVideo.mp4';
-import scraperVideo from '../src/videos/scraperVideo.mp4';
-import archiveVideo from '../src/videos/archive.mp4';
-import pacVideo from '../src/videos/pacman.mp4';
-import Description from './components/Description.jsx';
 import BlankDescription from './components/BlankDescription.jsx';
-import Project from '../src/components/Projects.jsx';
-import { createBrowserHistory } from 'history';
+import MerchType from './components/MerchType.js';
+import { createBrowserHistory, createHashHistory } from 'history';
 import './styles/App.css';
 
 function App() {
@@ -17,15 +10,9 @@ function App() {
     <Router history={createBrowserHistory}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route path={"/qwerty"} component={Qwerty}></Route>
-          <Route path={"/archive"} component={Archive}></Route>
-          <Route path={"/hamming"} component={Hamming}></Route>
-          <Route path={"/videoscraper"} component={VideoScraper}></Route>
-          <Route path={"/pacman"} component={Pacman}></Route>
-          <Route path={"/pong"} component={Pong}></Route>
-          <Route path={"/foodbanks"} component={FoodBanks}></Route>
+          <Route exact path="/" component={Home}/>                                     
           <Route path={"/choose-merch"} component={ChooseMerch}></Route>
+          <Route path={"/los-angeles-apparel"} component={LaMerch}></Route> 
         </Switch>
       </div>
     </Router>
@@ -35,30 +22,6 @@ function App() {
 class Home extends React.Component {
   qwerty = () => {
     this.props.history.push('/designer')
-  }
-
-  videoScraper = () => {
-    this.props.history.push('/videoscraper')
-  }
-
-  pacman = () => {
-    this.props.history.push('/pacman')
-  }
-
-  archive = () => {
-    this.props.history.push('/archive')
-  }
-
-  pong = () => {
-    this.props.history.push('/pong')
-  }
-
-  hamming = () => {
-    this.props.history.push('/hamming')
-  }
-
-  foodBanks = () => {
-    this.props.history.push('/foodbanks')
   }
 
   ChooseMerch = () => {
@@ -96,20 +59,25 @@ class Home extends React.Component {
 }
 
 export class ChooseMerch extends React.Component {
-
   static location = Location;
+  static history = null;
 
   constructor(props){
     super(props);
     this.location = props.location;
     this.overrideLocation();
+    this.history = this.props.history;
   };
 
   losAngelesApparel = () => {
-    this.props.history.push(`${this.props.match.path}/la-apparel`);
+    this.props.history.push("/los-angeles-apparel");
   }
 
   render() {
+
+    const exactPath = `${this.props.match.path}/`;
+    const matchPath = `${this.props.match.path}/la-apparel`;
+
     return (
         <div className="body">
             <nav>
@@ -131,16 +99,16 @@ export class ChooseMerch extends React.Component {
 
                 <h1 className="first">Choose your Blanks<a id="text"></a></h1>
                 <div className="columns">
-                    <Project projectId="laa" path={this.losAngelesApparel} quality={<a className="quality"> Best Quality</a>} coverId="coverScraper" name="Los Angeles Apparel"></Project>
-                    <Project projectId="gildan" quality={<a className="quality2"> Best Price</a>} path={this.archive} coverId="coverScraper" name="Gildan"></Project>
-                    <Project projectId="comfortColors" path={this.videoScraper} coverId="coverScraper"name="Comfort Colors"></Project>
-                    <Project projectId="alstyle" path={this.videoScraper} coverId="coverScraper"name="Alstyle"></Project>
+                    <MerchType projectId="laa" path={this.losAngelesApparel} matchPath={matchPath} history={this.props.history} merchInfo={this.merchInfo} quality={<a className="quality"> Best Quality</a>} coverId="coverScraper" name="Los Angeles Apparel"></MerchType>
+                    <MerchType projectId="gildan" quality={<a className="quality2"> Best Price</a>} path={this.archive} coverId="coverScraper" name="Gildan"></MerchType>
+                    <MerchType projectId="comfortColors" path={this.videoScraper} coverId="coverScraper"name="Comfort Colors"></MerchType>
+                    <MerchType projectId="alstyle" path={this.videoScraper} coverId="coverScraper"name="Alstyle"></MerchType>
                 </div>
             </div>
             <Switch location={this.location}>
-                <Route exact path={`${this.props.match.path}/`} component={this} />
+                <Route exact path={exactPath} component={this} />
             </Switch>
-            <Route path={`${this.props.match.path}/la-apparel`} component={LosAngelesApparel}/>
+            <Route path={matchPath} component={LosAngelesApparel}/>
         </div>
     );
   }
@@ -152,19 +120,37 @@ export class ChooseMerch extends React.Component {
   }
 }
 
-export class LosAngelesApparel extends React.Component{
+
+export class LaMerch extends React.Component{
   constructor(props){
     super(props);
   };
 
   homeClick = () => {
+    this.props.history.push('/');
+  }
+
+  render(){
+    return(
+      <p>hello</p>
+    )
+  }
+}
+
+
+export class LosAngelesApparel extends React.Component{
+  constructor(props){
+    super(props);
+  };
+
+  back = () => {
     this.props.history.push('/choose-merch');
   }
 
   render(){
     return(
       <BlankDescription 
-      onClick={this.homeClick} 
+      onClick={this.back} 
       caption="Merch made in the USA." 
       title="Los Angeles Apparel"
       padding="130px"
@@ -181,153 +167,5 @@ export class LosAngelesApparel extends React.Component{
   }
 }
 
-export class Archive extends React.Component{
-  render(){
-    return(
-      <Description 
-      video={archiveVideo}
-      projectName="Archive"
-      caption="Huffman Compression"
-      p1="This Huffman Coding implementation was created for a school project. The project builds two programs (the encoder and the decoder), the binaries can only be ran in linux but atleast we have another linux capatible compression algorithm."
-      p2="This project was created in raw C. The encoder works by first computing a histogram of all bytes (characters) within a file, then it traverses through the freqency of each character to emit a code table. Further, the encoder will then emit the Huffman tree into the encoded file, then emit each code that corresponds with each character in the original file."
-      p2b="The decoder works by reading in the dumped tree from the encoded file and reconstructs the Huffman tree. With this reconstructed tree, the decoder can read the rest of the file bit by bit to traverse down the Huffman tree one link at a time. Reading a 0 means to walk left, and reading a 1 means to walk right of the Huffman tree."
-      p3="Overall, this project was really fun and coding the assignment up in two weeks kept the adrenaline pumping. Check out the code on my GitHub and also check out my "
-      details="design"
-      href="https://docs.google.com/document/d/1TV7tv_EihiZ0EpDRFjV8yQ-Bk1MdsqCt-646f9M02Vk/edit?usp=sharing"
-      p3b=" document! ❤️ Links above."
-      website={ <p><a class="button">📦 View Design</a> </p>}
-      link="https://docs.google.com/document/d/1TV7tv_EihiZ0EpDRFjV8yQ-Bk1MdsqCt-646f9M02Vk/edit?usp=sharing"
-      gitLink="https://github.com/isebasus/archive/"
-      clas="details"
-      >
-      </Description>
-    )
-  }
-}
-
-export class Hamming extends React.Component{
-  render(){
-    return(
-      <Description 
-      video={qwertyVideo} 
-      projectName="Hamming"
-      caption="Hamming Encoding"
-      p1="This Web Proxy was originally created for the necessity of searching up websites under my high school wifi. As a result, most websites under the school wifi are blocked so a web proxy would save the day. Until, of course, one day it would finally become a blocked website as well."
-      p2="This project was created with the Flask web server. This application works by HTTP requesting a website to grab its HTML under a given search string. As a result, once the application has the HTMl it could use the css and js links to fully render the site. It does this by integrating this servers domain in front of the css and js links in the HTML so that way it could request the css and js from my server. It of course does not work for every single website, but it still needs work to be done."
-      p3="Overall, this project was a pain at first, trying to figure out how to render the HTML and css, but it was really fun in my opinion. Check out the code on my GitHub and also check out my website! ❤️ Links above."
-      website={ <p><a class="button">View Design</a> </p>}
-      link="https://docs.google.com/document/d/1TV7tv_EihiZ0EpDRFjV8yQ-Bk1MdsqCt-646f9M02Vk/edit?usp=sharing"
-      gitLink="https://github.com/isebasus/hamming/"
-      >
-      </Description>
-    )
-  }
-}
-
-export class Qwerty extends React.Component{
-  render(){
-    return(
-      <Description 
-      video={qwertyVideo} 
-      projectName="Qwerty"
-      caption="web proxy"
-      p1="This Web Proxy was originally created for the necessity of searching up websites under my high school wifi. As a result, most websites under the school wifi are blocked so a web proxy would save the day. Until, of course, one day it would finally become a blocked website as well."
-      p2="This project was created with the Flask web server. This application works by HTTP requesting a website to grab its HTML under a given search string. As a result, once the application has the HTMl it could use the css and js links to fully render the site. It does this by integrating this servers domain in front of the css and js links in the HTML so that way it could request the css and js from my server. It of course does not work for every single website, but it still needs work to be done."
-      p3="Overall, this project was a pain at first, trying to figure out how to render the HTML and css, but it was really fun in my opinion. Check out the code on my GitHub and also check out my website! ❤️ Links above."
-      website={ <p><a class="button">📦 Visit Site</a> </p>}
-      link="https://qwertyuiop.space"
-      gitLink="https://github.com/isebasus/qwertyuiop/"
-      >
-      </Description>
-    )
-  }
-}
-
-export class FoodBanks extends React.Component{
-  render(){
-    return(
-      <Description 
-      video={FoodVideo} 
-      projectName="FoodBanks"
-      caption="food banks!"
-      p1="This website was created to help individuals struggling from the Covid-19 pandemic to find food banks near them. I also thought it would be nice if I could help people struggling from the corona-virus pandemic."
-      p2="This project was created with Node.js. The application works by requesting and parsing data from Google's cloud platform API. After parsing the data, I store it into my own API, letting the website's front end access the data about local food banks."
-      p3="Overall, this project was really fun and knowing that I would be able to help people made the experience even better. Not to mention, going on the news was something different. Check out the article "
-      website={ <p><a class="button">📦 Visit Site</a> </p>}
-      details="here"
-      link="https://foodbanks.space"
-      href="https://www.10news.com/news/local-news/teen-creates-website-to-locate-local-food-banks"
-      gitLink="https://github.com/isebasus/FoodBanks/"
-      p3b=" and don't forget to check out my GitHub! ❤️ Link above." 
-      clas="details"
-      >
-      </Description>
-    )
-  }
-}
-
-export class VideoScraper extends React.Component{
-  render(){
-    return(
-      <Description 
-      gitLink="https://github.com/isebasus/YoutubeWebScraper/"
-      video={scraperVideo} 
-      projectName="Video Scraper"
-      caption="web scraper"
-      website={ <p><a class="button" href="https://github.com/ZumbaMaster313/YoutubeWebScraper/blob/master/webscraperPic.JPG">📦 View Images</a> </p>}
-      p1="This Youtube Web-Scraper is an app that is able to search up any youtube video from Youtube's API. It was made in flask, which is a Python library used to create web applications. This was created for the revolutionary purpose of being able to search up youtube videos on this application instead on youtube.com. Very innovative..."
-      p2="This project was my first flask application which was pretty fun for me to learn. The webscraper works by grabbing a search string which then sends an HTTP request to Youtube's API. The API then sends data back that contains the urls of each video that corresponds with the search string. With that, the application is able to display those URls as videos in HTML."
-      p3="As a result, I learned a lot about creating web applications since this was my first web application I made. There were some difficulties, like trying to find out how to work with Youtube's api and how to of course ping the api to get the information that the application needed. But overall very fun project, check out my code on my GitHub 💖. Link above!"
-      >
-      </Description>
-    )
-  }
-}
-
-export class Pacman extends React.Component{
-  render(){
-    return(
-      <Description 
-      projectName="Pacman"
-      caption="unity game"
-      website={ <p><a class="button">Visit Site</a> </p>}
-      video={pacVideo} 
-      gitLink="https://github.com/isebasus/PacMan"
-      link="https://gamessebastian.weebly.com/"
-      p1="A simple remake of Pacman... But it was made in Unity, not straight C. I made this game to understand how the ghosts in the game worked, so I was like &quot;ok I feel like making Pacman&quot;. "
-      p2="During this process I learned 2d animation, Tile mapping, Tile map art, and scripting object oriented for-loops. It worked out pretty good, except for the fact that some parts of the game doesn't function like the original."
-      p3="If you want more details about this project, it's " 
-      details="here"
-      href="https://isebasus.wixsite.com/sebs/pac-man"
-      p3b=". Thanks for checking it out!" 
-      clas="details"
-      ></Description>
-    )
-  }
-}
-
-export class Pong extends React.Component{
-  render(){
-    return(
-      <Description 
-      link="https://gameesseb.weebly.com/"
-      gitLink="https://github.com/isebasus/PongGame"
-      projectName="Pong"
-      caption="unity game"
-      website={ <p><a class="button">Visit Site</a> </p>}
-      video={pongVideo}
-      p1="A simple Pong game made in Unity, just wanted to develop it for fun. I also was interested in how the ball deflected off of the objects. "
-      p2="In this project, I learned how to invert the velocities of objects, use triggers on collision, and learned how the enemy behaved. I was honestly suprised that the game plays the same as the original... except for the score board 👌."
-      p3="Anyways, if you want more details about this project, it's "
-      details="here"
-      href="https://isebasus.wixsite.com/sebs/pong"
-      p3b=". Thanks for checking it out!"
-      clas="details"
-      >
-
-      </Description>
-    )
-  }
-}
 
 export default App;
