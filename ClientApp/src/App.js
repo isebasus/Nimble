@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Link} from "react-router-dom";
 import BlankDescription from './components/BlankDescription.jsx';
 import MerchType from './components/MerchType.js';
 import { createBrowserHistory, createHashHistory } from 'history';
+import ShoppingCart from './components/ShoppingCart.js';
 import './styles/App.css';
 
 function App() {
@@ -73,13 +74,19 @@ export class ChooseMerch extends React.Component {
     this.props.history.push("/los-angeles-apparel");
   }
 
+  gildanApparel = () => {
+    this.props.history.push("/gildan-apparel");
+  }
+
   render() {
 
     const exactPath = `${this.props.match.path}/`;
-    const matchPath = `${this.props.match.path}/la-apparel`;
+    const laPath = `${this.props.match.path}/la-apparel`;
+    const gildanPath = `${this.props.match.path}/gildan`;
 
     return (
         <div className="body">
+            <ShoppingCart />
             <nav>
                 <a href="https://github.com/isebasus/"class="logo" id="g" >
                     <h1 className="logoText">NIMBLE</h1>
@@ -99,8 +106,8 @@ export class ChooseMerch extends React.Component {
 
                 <h1 className="first">Choose your Blanks<a id="text"></a></h1>
                 <div className="columns">
-                    <MerchType projectId="laa" path={this.losAngelesApparel} matchPath={matchPath} history={this.props.history} merchInfo={this.merchInfo} quality={<a className="quality"> Best Quality</a>} coverId="coverScraper" name="Los Angeles Apparel"></MerchType>
-                    <MerchType projectId="gildan" quality={<a className="quality2"> Best Price</a>} path={this.archive} coverId="coverScraper" name="Gildan"></MerchType>
+                    <MerchType projectId="laa" path={this.losAngelesApparel} matchPath={laPath} history={this.props.history} quality={<a className="quality"> Best Quality</a>} coverId="coverScraper" name="Los Angeles Apparel"></MerchType>
+                    <MerchType projectId="gildan" path={this.gildanApparel} matchPath={gildanPath} history={this.props.history} quality={<a className="quality2"> Best Price</a>} path={this.archive} coverId="coverScraper" name="Gildan"></MerchType>
                     <MerchType projectId="comfortColors" path={this.videoScraper} coverId="coverScraper"name="Comfort Colors"></MerchType>
                     <MerchType projectId="alstyle" path={this.videoScraper} coverId="coverScraper"name="Alstyle"></MerchType>
                 </div>
@@ -108,7 +115,8 @@ export class ChooseMerch extends React.Component {
             <Switch location={this.location}>
                 <Route exact path={exactPath} component={this} />
             </Switch>
-            <Route path={matchPath} component={LosAngelesApparel}/>
+            <Route path={laPath} component={LosAngelesApparel}/>
+            <Route path={gildanPath} component={Gildan}></Route>
         </div>
     );
   }
@@ -155,6 +163,35 @@ export class LosAngelesApparel extends React.Component{
       title="Los Angeles Apparel"
       padding="130px"
       imageClass="laaGarments"
+      technology1="devicon-python-plain"
+      technology2="devicon-html5-plain"
+      technology3="devicon-javascript-plain"
+      type1="Python"
+      type2="HTML5/CSS"
+      type3="JavaScript"
+      gitLink="https://github.com/ZumbaMaster313/YoutubeWebScraper"
+      ></BlankDescription>
+    )
+  }
+}
+
+export class Gildan extends React.Component{
+  constructor(props){
+    super(props);
+  };
+
+  back = () => {
+    this.props.history.push('/choose-merch');
+  }
+
+  render(){
+    return(
+      <BlankDescription 
+      onClick={this.back} 
+      caption="Best priced shirt on the market." 
+      title="Gildan"
+      padding="130px"
+      imageClass="gildanGarments"
       technology1="devicon-python-plain"
       technology2="devicon-html5-plain"
       technology3="devicon-javascript-plain"
