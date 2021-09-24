@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,500,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700&display=swap');
 @import url("https://use.typekit.net/iso3fsz.css");
 
 ::selection {
@@ -533,6 +534,7 @@ img{
   position: relative;
   max-width: 800px; 
   align-items: right;
+  font-family: 'Exo 2', sans-serif;
 }
 
 .logoText{
@@ -636,6 +638,27 @@ a{
   font-weight: 600;
   float: right;
   margin-right: 0px;
+}
+
+.price {
+  color: black;
+  opacity: 0.9;
+  font-size: 15px;
+  font-weight: 600;
+  float: right;
+  margin-top: 0px;
+  margin-right: 5px;
+  font-family: 'Exo 2', sans-serif;
+}
+
+.palette {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline;
+  float: left;
+  margin-right: 5px;
+  padding-top: 10px;
 }
 
 .quality2 {
