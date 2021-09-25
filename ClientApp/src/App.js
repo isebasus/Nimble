@@ -14,7 +14,10 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home}/>                                     
           <Route path={"/choose-merch"} component={ChooseMerch}></Route>
-          <Route path={"/los-angeles-apparel"} component={Merch}></Route> 
+          <Route path={"/los-angeles-apparel"} component={Merch}></Route>
+          <Route path={"/gildan-apparel"} component={Merch}></Route>
+          <Route path={"/comfort-colors-apparel"} component={Merch}></Route>
+          <Route path={"/alstyle-apparel"} component={Merch}></Route>
         </Switch>
       </div>
     </Router>
@@ -82,6 +85,14 @@ export class ChooseMerch extends React.Component {
     this.props.history.push("/gildan-apparel");
   }
 
+  comfortApparel = () => { 
+    this.props.history.push("/comfort-colors-apparel");
+  }
+
+  alstyleApparel = () => {
+    this.props.history.push("/alstyle-apparel");
+  }
+
   render() {
 
     const exactPath = `${this.props.match.path}/`;
@@ -114,9 +125,9 @@ export class ChooseMerch extends React.Component {
                 <h1 className="first">Choose your Blanks<a id="text"></a></h1>
                 <div className="columns">
                     <MerchType projectId="laa" path={this.losAngelesApparel} matchPath={laPath} history={this.props.history} quality={<a className="quality"> Best Quality</a>} coverId="coverScraper" name="LOS ANGELES APPAREL"></MerchType>
-                    <MerchType projectId="gildan" path={this.gildanApparel} matchPath={gildanPath} history={this.props.history} quality={<a className="quality2"> Best Price</a>} path={this.archive} coverId="coverScraper" name="GILDAN"></MerchType>
-                    <MerchType projectId="comfortColors" path={this.videoScraper} coverId="coverScraper"name="COMFORT COLORS"></MerchType>
-                    <MerchType projectId="alstyle" path={this.videoScraper} coverId="coverScraper"name="ALSTYLE"></MerchType>
+                    <MerchType projectId="gildan" path={this.gildanApparel} matchPath={gildanPath} history={this.props.history} quality={<a className="quality2"> Best Price</a>} coverId="coverScraper" name="GILDAN"></MerchType>
+                    <MerchType projectId="comfortColors" path={this.comfortApparel} coverId="coverScraper"name="COMFORT COLORS"></MerchType>
+                    <MerchType projectId="alstyle" path={this.alstyleApparel} coverId="coverScraper"name="ALSTYLE"></MerchType>
                 </div>
             </div>
             <Switch location={this.location}>
@@ -142,23 +153,37 @@ export class Merch extends React.Component {
   }
 
   render() {
+
+  var merch = {
+    GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-Shirt", "16 / SHIRT"],
+    PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-Shirt", "$16 / SHIRT"],
+    GarmentDiedHoodie: ["comfortColors", ['#914637', '#e30e11', '#2e9e50'], "HF-09 HOODIE", "$26 / HOODIE"],
+    ZipUpHoodie: ["alstyle", ['#914637', '#e30e11', '#2e9e50'], "HF-10 HOODIE", "$26 / HOODIE"]
+  }
+
     const location = this.props.location.pathname;
+    var name = "";
+    var caption = "";
     switch(location) {
       case '/los-angeles-apparel':
+        name = "Los Angeles Apparel"
+        caption = "The best merch made in the USA."
         break;
-      case '/gildan':
-        // TODO
+      case '/gildan-apparel':
+        name = "Gildan"
+        caption = "Best priced merch on the market."
         break;
-      case '/comfort-colors-merch':
-        // TODO
+      case '/comfort-colors-apparel':
+        name = "Comfort Colors"
+        caption = "Best comfort for cheap."
         break;
-      case '/alstyle':
-        // TODO
+      case '/alstyle-apparel':
+        name = "Alstyle"
+        caption = "Not the best merch."
         break;
-
     }
 
-    return <MerchPage></MerchPage>
+    return <MerchPage name={name} caption={caption} merch={merch}></MerchPage>
   }
 
 }
