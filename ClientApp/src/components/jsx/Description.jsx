@@ -1,6 +1,4 @@
 import React, { Component, forwardRef, useRef, useImperativeHandle  } from 'react';
-import Octicon, {LogoGithub} from '@primer/octicons-react'
-import git from '../images/GitHub-Mark-Light-32px.png';
 import injectSheet from 'react-jss';
 import withStyles from "react-jss";
 import PropTypes from "prop-types";

@@ -12,9 +12,11 @@ export class MerchPage extends Component{
     }
   
     render(){
-        var items = Object.entries(this.props.merch).map(([key, value]) => 
-            <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]}></TShirtType>
-        );
+
+      var items = Object.entries(this.props.merch).map(([key, value]) => 
+        <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]} onClick={this.search.bind(this, value[4])}></TShirtType>
+      );
+
       return(
         <div className="body">
               <nav>
@@ -46,4 +48,7 @@ export class MerchPage extends Component{
           </div>
       )
     }
+    search(e, matchPath){
+      this.props.history.push(matchPath);
+  }
   }
