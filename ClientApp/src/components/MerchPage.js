@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TShirtType from './TShirtTypes.js';
 
-export class MerchPage extends React.Component{
+export class MerchPage extends Component{
 
     constructor(props){
       super(props);
@@ -47,13 +47,3 @@ export class MerchPage extends React.Component{
       )
     }
   }
-
-
-
-
-  /*
-  <TShirtType projectId="laa" colors={['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7']} coverId="coverScraper" name="1801GD T-Shirt" price="$16 / SHIRT"></TShirtType>
-                      <TShirtType projectId="gildan" colors={['#914637', '#e30e11', '#2e9e50']} path={this.archive} coverId="coverScraper" name="1809GD T-Shirt" price="$16 / SHIRT"></TShirtType>
-                      <TShirtType projectId="comfortColors" colors={['#914637', '#e30e11', '#2e9e50']} coverId="coverScraper"name="HF-09 HOODIE" price="$26 / HOODIE"></TShirtType>
-                      <TShirtType projectId="alstyle" colors={['#914637', '#e30e11', '#2e9e50']} coverId="coverScraper"name="HF-10 HOODIE" price="$26 / HOODIE"></TShirtType>
-  */

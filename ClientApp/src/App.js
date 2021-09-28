@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link, useLocation} from "react-router-dom";
-import BlankDescription from './components/BlankDescription.jsx';
+import BlankDescription from './components/jsx/BlankDescription.jsx';
 import MerchType from './components/MerchType.js';
 import { createBrowserHistory, createHashHistory } from 'history';
 import ShoppingCart from './components/ShoppingCart.js';
@@ -154,13 +154,7 @@ export class Merch extends React.Component {
 
   render() {
 
-  var merch = {
-    GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-Shirt", "16 / SHIRT"],
-    PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-Shirt", "$16 / SHIRT"],
-    GarmentDiedHoodie: ["comfortColors", ['#914637', '#e30e11', '#2e9e50'], "HF-09 HOODIE", "$26 / HOODIE"],
-    ZipUpHoodie: ["alstyle", ['#914637', '#e30e11', '#2e9e50'], "HF-10 HOODIE", "$26 / HOODIE"]
-  }
-
+    var merch;
     const location = this.props.location.pathname;
     var name = "";
     var caption = "";
@@ -168,18 +162,34 @@ export class Merch extends React.Component {
       case '/los-angeles-apparel':
         name = "Los Angeles Apparel"
         caption = "The best merch made in the USA."
+        merch = {
+          GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-SHIRT", "$16 / SHIRT"],
+          PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-SHIRT", "$16 / SHIRT"],
+          GarmentDiedHoodie: ["comfortColors", ['#914637', '#e30e11', '#2e9e50'], "HF-09 HOODIE", "$26 / HOODIE"],
+          ZipUpHoodie: ["alstyle", ['#914637', '#e30e11', '#2e9e50'], "HF-10 HOODIE", "$26 / HOODIE"]
+        }
         break;
       case '/gildan-apparel':
         name = "Gildan"
         caption = "Best priced merch on the market."
+        merch = {
+          RegularShirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "GILDAN T-SHIRT", "16 / SHIRT"],
+          Hoodie: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "GILDAN HOODIE", "$16 / SHIRT"],
+        }
         break;
       case '/comfort-colors-apparel':
         name = "Comfort Colors"
         caption = "Best comfort for cheap."
+        merch = {
+          Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "COMFORT COLORS T-SHIRT", "16 / SHIRT"],
+        }
         break;
       case '/alstyle-apparel':
         name = "Alstyle"
         caption = "Not the best merch."
+        merch = {
+          Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "ALSTYLE T-SHIRT", "16 / SHIRT"],
+        }
         break;
     }
 
