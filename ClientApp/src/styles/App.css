@@ -137,6 +137,11 @@ h2{
   background-color: #FAFAFA;
 }
 
+.descriptionBody {
+  width: 100%;
+  
+}
+
 .merch{
   max-width: 800px;
   margin: 0px auto;
