@@ -11,7 +11,7 @@ export default class TShirtType extends Component {
     
     render() {
         return (
-            <div id="parentContainer" style={{color: '-webkit-link', cursor: 'pointer'}}>
+            <div id="parentContainer" style={{color: '-webkit-link', cursor: 'pointer'}} onClick={this.search.bind(this)}>
                 <div className="parent" id={this.props.projectId}>
                     <div className="project">
                         <a class="infoIcon" id="i" >
@@ -28,5 +28,9 @@ export default class TShirtType extends Component {
                 </div>
             </div>
         );
+    }
+
+    search(e){
+        this.props.history.push(this.props.match);
     }
 }
