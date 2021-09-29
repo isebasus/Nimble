@@ -12,10 +12,15 @@ export class MerchPage extends Component{
     }
   
     render(){
-
-      var items = Object.entries(this.props.merch).map(([key, value]) => 
-        <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]} history={this.props.history} match={value[4]}></TShirtType>
-      );
+      
+      var items;
+      if (this.props.merch != null) {
+        items = Object.entries(this.props.merch).map(([key, value]) => 
+          <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]} history={this.props.history} match={value[4]}></TShirtType>
+        );
+      } else {
+        items = <div></div>
+      }
 
       return(
         <div className="body">
@@ -48,7 +53,4 @@ export class MerchPage extends Component{
           </div>
       )
     }
-    search(e, matchPath){
-      this.props.history.push(matchPath);
-  }
   }
