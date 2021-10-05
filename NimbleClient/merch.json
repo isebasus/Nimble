@@ -1,0 +1,35 @@
+{
+    "los-angeles-apparel": {
+        "name": "Los Angeles Apparel",
+        "caption": "The best merch made in the USA.",
+        "matchPath": ["`${this.props.match.path}/1801gd`", "`${this.props.match.path}/1809gd`", "`${this.props.match.path}/hf09`", "`${this.props.match.path}/hf10`"],
+        "merch": {
+            "GarmentDiedTShirt": ["laa", ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"], "1801GD T-SHIRT", "$16 / SHIRT", "matchPath[0]"],
+            "PocketTShirt": ["gildan", ["#914637", "#e30e11", "#2e9e50"], "1809GD T-SHIRT", "$16 / SHIRT", "matchPath[1]"],
+            "GarmentDiedHoodie": ["comfortColors", ["#914637", "#e30e11", "#2e9e50"], "HF-09 HOODIE", "$26 / HOODIE", "matchPath[2]"],
+            "ZipUpHoodie": ["alstyle", ["#914637", "#e30e11", "#2e9e50"], "HF-10 HOODIE", "$26 / HOODIE", "matchPath[3]"]
+        }
+    }, "gildan-apparel": {
+        "name": "Gildan",
+        "caption": "Best Priced merch on the market",
+        "matchPath": ["`${this.props.match.path}/regular-shirt`", "`${this.props.match.path}/hoodie`"],
+        "merch": {
+            "RegularShirt": ["laa", ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"], "GILDAN T-SHIRT", "16 / SHIRT", "matchPath[0]"],
+            "Hoodie": ["gildan", ["#914637", "#e30e11", "#2e9e50"], "GILDAN HOODIE", "$16 / SHIRT", "matchPath[1]"]
+        }
+    }, "comfort-colors-apparel": {
+        "name": "Comfort Colors",
+        "caption": "Best comfort for cheap.",
+        "matchPath": ["`${this.props.match.path}/shirt`"],
+        "merch": {
+            "Shirt": ["laa", ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"], "COMFORT COLORS T-SHIRT", "16 / SHIRT", "matchPath[0]"]
+        }
+    }, "alstyle-apparel": {
+        "name": "Alstyle",
+        "caption": "Not the best merch",
+        "matchPath": ["`${this.props.match.path}/shirt`"],
+        "merch": {
+            "Shirt": ["laa", ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"], "ALSTYLE T-SHIRT", "16 / SHIRT", "matchPath[0]"]
+        }
+    }
+}
