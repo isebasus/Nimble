@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using nimble.Data;
+using nimble.Data.Merch;
 
 namespace nimble.Controllers
 {
@@ -15,16 +16,16 @@ namespace nimble.Controllers
     {
         private IMongoDatabase _database;
 
-        private static IMongoCollection<BsonDocument> _merch;
+        private static IMongoCollection<Merch> _merch;
         
         public MerchController(IMongoClient client)
         {
             _database = client.GetDatabase("nimble");
-            _merch = _database.GetCollection<BsonDocument>("merch");
+            _merch = _database.GetCollection<Merch>("merch");
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<Merch> Get()
         {
             return null;
         }
