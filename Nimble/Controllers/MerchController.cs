@@ -25,10 +25,11 @@ namespace nimble.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Merch> Get()
+        public IEnumerable<Merch> Get(String merchType)
         {
-            return null;
+            return _merch.Find(m => m.Name == merchType).ToList();
         }
+        
     }
 }
 

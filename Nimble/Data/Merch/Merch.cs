@@ -9,6 +9,7 @@ namespace nimble.Data.Merch
     
     public class Merch
     {
+        [BsonId]
         public ObjectId Id { get; set; }
         
         [BsonElement("name")]
@@ -20,13 +21,8 @@ namespace nimble.Data.Merch
         [BsonElement("matchPath")]
         public string[] MatchPaths { get; set; }
         
-        [BsonElement("merch")]
-        private readonly Dictionary<string, string[]> MerchTypes = new Dictionary<string, string[]>();
-
-        public string[] this[string key]
-        {
-            get { return MerchTypes[key]; }
-            set { MerchTypes[key] = value; }
-        }
+        [BsonExtraElements]
+        public object[] MerchTypes {get; set; }
+        
     }
 }
