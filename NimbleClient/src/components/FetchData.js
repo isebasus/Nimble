@@ -5,14 +5,14 @@ export class FetchData extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { forecasts: [], loading: true };
+        this.state = { merch: [], loading: true };
     }
 
     componentDidMount() {
         this.populateWeatherData();
     }
 
-    static renderForecastsTable(forecasts) {
+    static renderForecastsTable(merch) {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -24,12 +24,10 @@ export class FetchData extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {forecasts.map(forecast =>
-                        <tr key={forecast.date}>
-                            <td>{forecast.date}</td>
-                            <td>{forecast.temperatureC}</td>
-                            <td>{forecast.temperatureF}</td>
-                            <td>{forecast.summary}</td>
+                    {merch.map(merch =>
+                        <tr key={merch.name}>
+                            <td>{merch.name}</td>
+                            <td>{merch.caption}</td>
                         </tr>
                     )}
                 </tbody>
@@ -40,7 +38,7 @@ export class FetchData extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : FetchData.renderForecastsTable(this.state.forecasts);
+            : FetchData.renderForecastsTable(this.state.merch);
 
         return (
             <div>
@@ -51,9 +49,16 @@ export class FetchData extends Component {
         );
     }
 
-    async populateWeatherData() {
-        const response = await fetch('weatherforecast');
+    async populateWeatherData(merchType) {
+        const formData = new FormData();
+        formData.append('name', merchType);
+
+        const response = await fetch('/api/Merch', {
+            method: 'POST',
+            body: formData
+        })
+
         const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
+        this.setState({ merch: data, loading: false });
     }
 }

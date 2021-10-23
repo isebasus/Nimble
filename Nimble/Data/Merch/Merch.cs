@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace nimble.Data.Merch
 {
     
+    [BsonIgnoreExtraElements]
     public class Merch
     {
         [BsonId]
@@ -20,9 +21,5 @@ namespace nimble.Data.Merch
         
         [BsonElement("matchPath")]
         public string[] MatchPaths { get; set; }
-        
-        [BsonExtraElements]
-        public object[] MerchTypes {get; set; }
-        
     }
 }

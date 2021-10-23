@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 using MongoDB.Bson;
-using nimble.Data;
+using MongoDB.Driver;
 using nimble.Data.Merch;
 
 namespace nimble.Controllers
@@ -14,22 +11,20 @@ namespace nimble.Controllers
     [Route("[controller]")]
     public class MerchController : ControllerBase
     {
-        private IMongoDatabase _database;
-
         private static IMongoCollection<Merch> _merch;
         
         public MerchController(IMongoClient client)
         {
-            _database = client.GetDatabase("nimble");
-            _merch = _database.GetCollection<Merch>("merch");
-        }
-
-        [HttpGet]
-        public IEnumerable<Merch> Get(String merchType)
-        {
-            return _merch.Find(m => m.Name == merchType).ToList();
+            IMongoDatabase database = client.GetDatabase("nimble");
+            _merch = database.GetCollection<Merch>("merch");
         }
         
+        [Route("/api/Merch")]
+        [HttpPost]
+        public IEnumerable<Merch> Post([FromForm] String name)
+        {
+            return _merch.Find(m => m.Name == "Los Angeles Apparel").ToList();
+        }
     }
 }
 

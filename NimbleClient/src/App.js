@@ -7,6 +7,7 @@ import ShoppingCart from './components/ShoppingCart.js';
 import { MerchPage } from './components/MerchPage.js';
 import qwertyVideo from '../src/videos/qwertyVideo.mp4';
 import Description from './components/jsx/Description.jsx';
+import {FetchData} from './components/FetchData.js';
 import './styles/App.css';
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
     <Router history={createBrowserHistory}>
       <div className="App">
         <Switch>
-          <Route exact path="/" component={Home}/>                                     
+          <Route exact path="/" component={Home}/>                   
+          <Route path='/fetch-data' component={FetchData} />   
           <Route path={"/choose-merch"} component={ChooseMerch}></Route>
           <Route path={"/los-angeles-apparel"} component={Merch}></Route>
           <Route path={"/gildan-apparel"} component={Merch}></Route>
@@ -224,9 +226,16 @@ export class Merch extends React.Component {
         {matchPath.map((path) => 
           <Route path={path} component={ApparelDescription}/>
         )}
+        <div> {} </div>
       </div>
     )
   }
+
+  async populateWeatherData() {
+    const response = await fetch('weatherforecast');
+    const data = await response.json();
+    this.setState({ forecasts: data, loading: false });
+}
 
   overrideLocation() {
     let location = Object.assign({}, this.props.location)

@@ -25,8 +25,9 @@ namespace nimble
         {
             services.AddSingleton<IMongoClient, MongoClient>(s =>
             {
-                var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
-                return new MongoClient(uri);
+                string uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
+                var settings = MongoClientSettings.FromConnectionString(uri);
+                return new MongoClient(settings);
             });
             services.AddControllersWithViews();
 
