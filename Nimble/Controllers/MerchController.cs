@@ -23,7 +23,7 @@ namespace nimble.Controllers
         [HttpPost]
         public IEnumerable<Merch> Post([FromForm] String name)
         {
-            return _merch.Find(m => m.Name == "Los Angeles Apparel").ToList();
+            return _merch.Find(m => m.Name == name).ToList();
         }
     }
 }

@@ -160,6 +160,8 @@ export class Merch extends React.Component {
     this.location = props.location;
     this.overrideLocation();
     this.history = this.props.history;
+    this.state = { merch: [], loading: true };
+    this.isLoaded = false;
   };
 
   render() {
@@ -174,12 +176,21 @@ export class Merch extends React.Component {
 
     switch(location) {
       case '/los-angeles-apparel':
-        name = "Los Angeles Apparel"
-        caption = "The best merch made in the USA."
 
-        const hello = "`${this.props.match.path}/1801gd`";
+        if (this.isLoaded == false) {
+          this.populateMerchData('Los Angeles Apparel');
+          this.isLoaded = true;
+        }
 
-        matchPath = [eval(hello), `${this.props.match.path}/1809gd`, `${this.props.match.path}/hf09`, `${this.props.match.path}/hf10`]
+        this.state.merch.map(merch => {
+          name = merch.name;
+          caption = merch.caption;
+          
+          for (var i in merch.matchPaths) {
+            matchPath.push(eval(merch.matchPaths[i]))
+          }
+        })
+
         merch = {
           GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-SHIRT", "$16 / SHIRT", matchPath[0]],
           PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-SHIRT", "$16 / SHIRT", matchPath[1]],
@@ -188,6 +199,9 @@ export class Merch extends React.Component {
         }
         break;
       case '/gildan-apparel':
+
+        this.populateMerchData('Gildan')
+
         name = "Gildan"
         caption = "Best priced merch on the market."
 
@@ -198,6 +212,8 @@ export class Merch extends React.Component {
         }
         break;
       case '/comfort-colors-apparel':
+
+        this.populateMerchData('Comfort Colors')
         name = "Comfort Colors"
         caption = "Best comfort for cheap."
 
@@ -207,6 +223,8 @@ export class Merch extends React.Component {
         }
         break;
       case '/alstyle-apparel':
+        this.populateMerchData('')
+
         name = "Alstyle"
         caption = "Not the best merch."
 
@@ -231,11 +249,18 @@ export class Merch extends React.Component {
     )
   }
 
-  async populateWeatherData() {
-    const response = await fetch('weatherforecast');
+  async populateMerchData(merchType) {
+    const formData = new FormData();
+    formData.append('name', merchType);
+
+    const response = await fetch('/api/Merch', {
+        method: 'POST',
+        body: formData
+    })
+
     const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
-}
+    this.setState({ merch: data, loading: false });
+  }
 
   overrideLocation() {
     let location = Object.assign({}, this.props.location)

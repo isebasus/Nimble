@@ -8,10 +8,6 @@ export class FetchData extends Component {
         this.state = { merch: [], loading: true };
     }
 
-    componentDidMount() {
-        this.populateWeatherData();
-    }
-
     static renderForecastsTable(merch) {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
@@ -36,6 +32,8 @@ export class FetchData extends Component {
     }
 
     render() {
+        this.populateWeatherData('Los Angeles Apparel');
+
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : FetchData.renderForecastsTable(this.state.merch);

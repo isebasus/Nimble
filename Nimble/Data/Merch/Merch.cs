@@ -21,5 +21,8 @@ namespace nimble.Data.Merch
         
         [BsonElement("matchPath")]
         public string[] MatchPaths { get; set; }
+        
+        [BsonElement("merch")]
+        public object MerchObject { get; set; }
     }
 }
