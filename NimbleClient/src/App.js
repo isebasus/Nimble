@@ -166,7 +166,7 @@ export class Merch extends React.Component {
 
   render() {
 
-    var merch;
+    var merchObject = [];
     var name = "";
     var caption = "";
 
@@ -189,14 +189,15 @@ export class Merch extends React.Component {
           for (var i in merch.matchPaths) {
             matchPath.push(eval(merch.matchPaths[i]))
           }
-        })
 
-        merch = {
-          GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-SHIRT", "$16 / SHIRT", matchPath[0]],
-          PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-SHIRT", "$16 / SHIRT", matchPath[1]],
-          GarmentDiedHoodie: ["comfortColors", ['#914637', '#e30e11', '#2e9e50'], "HF-09 HOODIE", "$26 / HOODIE", matchPath[2]],
-          ZipUpHoodie: ["alstyle", ['#914637', '#e30e11', '#2e9e50'], "HF-10 HOODIE", "$26 / HOODIE", matchPath[3]]
-        }
+          var j = 0;
+          for (var i in merch.merchObject) {
+            merch.merchObject[i][merch.merchObject[i].length - 1] = matchPath[j];
+            merchObject.push(merch.merchObject[i]);
+            j++;
+          }
+
+        })
         break;
       case '/gildan-apparel':
 
@@ -206,7 +207,7 @@ export class Merch extends React.Component {
         caption = "Best priced merch on the market."
 
         matchPath = [`${this.props.match.path}/regular-shirt`, `${this.props.match.path}/hoodie`]
-        merch = {
+        merchObject = {
           RegularShirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "GILDAN T-SHIRT", "16 / SHIRT", matchPath[0]],
           Hoodie: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "GILDAN HOODIE", "$16 / SHIRT", matchPath[1]],
         }
@@ -218,7 +219,7 @@ export class Merch extends React.Component {
         caption = "Best comfort for cheap."
 
         matchPath = [`${this.props.match.path}/shirt`]
-        merch = {
+        merchObject = {
           Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "COMFORT COLORS T-SHIRT", "16 / SHIRT", matchPath[0]],
         }
         break;
@@ -229,7 +230,7 @@ export class Merch extends React.Component {
         caption = "Not the best merch."
 
         matchPath = [`${this.props.match.path}/shirt`]
-        merch = {
+        merchObject = {
           Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "ALSTYLE T-SHIRT", "16 / SHIRT", matchPath[0]],
         }
         break;
@@ -237,7 +238,7 @@ export class Merch extends React.Component {
 
     return (
       <div>
-        <MerchPage name={name} caption={caption} merch={merch} history={this.props.history} matchPath={matchPath}></MerchPage>
+        <MerchPage name={name} caption={caption} merch={merchObject} history={this.props.history} matchPath={matchPath}></MerchPage>
         <Switch location={this.location}>
           <Route exact path={exactPath} component={this} />
         </Switch>
