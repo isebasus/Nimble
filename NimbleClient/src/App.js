@@ -151,7 +151,6 @@ export class ChooseMerch extends React.Component {
 }
 
 export class Merch extends React.Component {
-
   static location = Location;
   static history = null;
 
@@ -160,92 +159,52 @@ export class Merch extends React.Component {
     this.location = props.location;
     this.overrideLocation();
     this.history = this.props.history;
-    this.state = { merch: [], loading: true };
+    this.state = { merch: [], loading: true, merchObject: [], matchPath: [], name: "", caption: "", exactPath: ''};
     this.isLoaded = false;
   };
 
   render() {
-
-    var merchObject = [];
-    var name = "";
-    var caption = "";
-
-    var matchPath = [];
     const location = this.props.location.pathname;
-    const exactPath = `${this.props.match.path}/`;
-
     switch(location) {
       case '/los-angeles-apparel':
-
         if (this.isLoaded == false) {
           this.populateMerchData('Los Angeles Apparel');
           this.isLoaded = true;
         }
-
-        this.state.merch.map(merch => {
-          name = merch.name;
-          caption = merch.caption;
-          
-          for (var i in merch.matchPaths) {
-            matchPath.push(eval(merch.matchPaths[i]))
-          }
-
-          var j = 0;
-          for (var i in merch.merchObject) {
-            merch.merchObject[i][merch.merchObject[i].length - 1] = matchPath[j];
-            merchObject.push(merch.merchObject[i]);
-            j++;
-          }
-
-        })
+        this.formatMerchData();
         break;
       case '/gildan-apparel':
-
-        this.populateMerchData('Gildan')
-
-        name = "Gildan"
-        caption = "Best priced merch on the market."
-
-        matchPath = [`${this.props.match.path}/regular-shirt`, `${this.props.match.path}/hoodie`]
-        merchObject = {
-          RegularShirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "GILDAN T-SHIRT", "16 / SHIRT", matchPath[0]],
-          Hoodie: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "GILDAN HOODIE", "$16 / SHIRT", matchPath[1]],
+        if (this.isLoaded == false) {
+          this.populateMerchData('Gildan');
+          this.isLoaded = true;
         }
+        this.formatMerchData();
         break;
       case '/comfort-colors-apparel':
-
-        this.populateMerchData('Comfort Colors')
-        name = "Comfort Colors"
-        caption = "Best comfort for cheap."
-
-        matchPath = [`${this.props.match.path}/shirt`]
-        merchObject = {
-          Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "COMFORT COLORS T-SHIRT", "16 / SHIRT", matchPath[0]],
+        if (this.isLoaded == false) {
+          this.populateMerchData('Comfort Colors');
+          this.isLoaded = true;
         }
+        this.formatMerchData();
         break;
       case '/alstyle-apparel':
-        this.populateMerchData('')
-
-        name = "Alstyle"
-        caption = "Not the best merch."
-
-        matchPath = [`${this.props.match.path}/shirt`]
-        merchObject = {
-          Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "ALSTYLE T-SHIRT", "16 / SHIRT", matchPath[0]],
+        if (this.isLoaded == false) {
+          this.populateMerchData('Alstyle');
+          this.isLoaded = true;
         }
+        this.formatMerchData();
         break;
     }
 
     return (
       <div>
-        <MerchPage name={name} caption={caption} merch={merchObject} history={this.props.history} matchPath={matchPath}></MerchPage>
+        <MerchPage name={this.state.name} caption={this.state.caption} merch={this.state.merchObject} history={this.props.history} matchPath={this.state.matchPath}></MerchPage>
         <Switch location={this.location}>
-          <Route exact path={exactPath} component={this} />
+          <Route exact path={this.state.exactPath} component={this} />
         </Switch>
-        {matchPath.map((path) => 
+        {this.state.matchPath.map((path) => 
           <Route path={path} component={ApparelDescription}/>
         )}
-        <div> {} </div>
       </div>
     )
   }
@@ -260,7 +219,7 @@ export class Merch extends React.Component {
     })
 
     const data = await response.json();
-    this.setState({ merch: data, loading: false });
+    this.setState({ merch: data, loading: false, merchObject: [], matchPath: [], name: "", caption: "", exactPath: `${this.props.match.path}/`});
   }
 
   overrideLocation() {
@@ -269,6 +228,22 @@ export class Merch extends React.Component {
     this.location = location
   }
 
+  formatMerchData() {
+    this.state.merch.map(merch => {
+      this.state.name = merch.name;
+      this.state.caption = merch.caption;
+      
+      for (var i in merch.matchPaths) {
+        this.state.matchPath.push(eval(merch.matchPaths[i]));
+      }
+      var j = 0;
+      for (var i in merch.merchObject) {
+        merch.merchObject[i][merch.merchObject[i].length - 1] = this.state.matchPath[j];
+        this.state.merchObject.push(merch.merchObject[i]);
+        j++;
+      }
+    })
+  }
 }
 
 export class ApparelDescription extends React.Component {

@@ -16,7 +16,7 @@ export class MerchPage extends Component{
     render(){
       var wrapper;
       if (this.props.merch != null) {
-        var items = this.props.merch.map(value => 
+        var items = Object.entries(this.props.merch).map(([key, value]) => 
           <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]} history={this.props.history} match={value[4]}></TShirtType>
         );
 
