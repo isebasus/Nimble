@@ -6,7 +6,7 @@ import { createBrowserHistory, createHashHistory } from 'history';
 import ShoppingCart from './components/ShoppingCart.js';
 import { MerchPage } from './components/MerchPage.js';
 import qwertyVideo from '../src/videos/qwertyVideo.mp4';
-import Description from './components/jsx/Description.jsx';
+import Description from './components/jsx/Description.js';
 import {FetchData} from './components/FetchData.js';
 import './styles/App.css';
 
@@ -151,6 +151,7 @@ export class ChooseMerch extends React.Component {
 }
 
 export class Merch extends React.Component {
+  
   static location = Location;
   static history = null;
 
@@ -159,67 +160,75 @@ export class Merch extends React.Component {
     this.location = props.location;
     this.overrideLocation();
     this.history = this.props.history;
-    this.state = { merch: [], loading: true, merchObject: [], matchPath: [], name: "", caption: "", exactPath: ''};
-    this.isLoaded = false;
   };
 
   render() {
+
+    var merch;
+    var name = "";
+    var caption = "";
+
+    var matchPath = [];
     const location = this.props.location.pathname;
+    const exactPath = `${this.props.match.path}/`;
+
     switch(location) {
       case '/los-angeles-apparel':
-        if (this.isLoaded == false) {
-          this.populateMerchData('Los Angeles Apparel');
-          this.isLoaded = true;
+        name = "Los Angeles Apparel"
+        caption = "The best merch made in the USA."
+
+        const hello = "`${this.props.match.path}/1801gd`";
+
+        matchPath = [eval(hello), `${this.props.match.path}/1809gd`, `${this.props.match.path}/hf09`, `${this.props.match.path}/hf10`]
+        merch = {
+          GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-SHIRT", "$16 / SHIRT", matchPath[0]],
+          PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-SHIRT", "$16 / SHIRT", matchPath[1]],
+          GarmentDiedHoodie: ["comfortColors", ['#914637', '#e30e11', '#2e9e50'], "HF-09 HOODIE", "$26 / HOODIE", matchPath[2]],
+          ZipUpHoodie: ["alstyle", ['#914637', '#e30e11', '#2e9e50'], "HF-10 HOODIE", "$26 / HOODIE", matchPath[3]]
         }
-        this.formatMerchData();
         break;
       case '/gildan-apparel':
-        if (this.isLoaded == false) {
-          this.populateMerchData('Gildan');
-          this.isLoaded = true;
+        name = "Gildan"
+        caption = "Best priced merch on the market."
+
+        matchPath = [`${this.props.match.path}/regular-shirt`, `${this.props.match.path}/hoodie`]
+        merch = {
+          RegularShirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "GILDAN T-SHIRT", "16 / SHIRT", matchPath[0]],
+          Hoodie: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "GILDAN HOODIE", "$16 / SHIRT", matchPath[1]],
         }
-        this.formatMerchData();
         break;
       case '/comfort-colors-apparel':
-        if (this.isLoaded == false) {
-          this.populateMerchData('Comfort Colors');
-          this.isLoaded = true;
+        name = "Comfort Colors"
+        caption = "Best comfort for cheap."
+
+        matchPath = [`${this.props.match.path}/shirt`]
+        merch = {
+          Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "COMFORT COLORS T-SHIRT", "16 / SHIRT", matchPath[0]],
         }
-        this.formatMerchData();
         break;
       case '/alstyle-apparel':
-        if (this.isLoaded == false) {
-          this.populateMerchData('Alstyle');
-          this.isLoaded = true;
+        name = "Alstyle"
+        caption = "Not the best merch."
+
+        matchPath = [`${this.props.match.path}/shirt`]
+        merch = {
+          Shirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "ALSTYLE T-SHIRT", "16 / SHIRT", matchPath[0]],
         }
-        this.formatMerchData();
         break;
     }
 
     return (
       <div>
-        <MerchPage name={this.state.name} caption={this.state.caption} merch={this.state.merchObject} history={this.props.history} matchPath={this.state.matchPath}></MerchPage>
+        <MerchPage name={name} caption={caption} merch={merch} history={this.props.history} matchPath={matchPath}></MerchPage>
         <Switch location={this.location}>
-          <Route exact path={this.state.exactPath} component={this} />
+          <Route exact path={exactPath} component={this} />
         </Switch>
-        {this.state.matchPath.map((path) => 
+        {matchPath.map((path) => 
           <Route path={path} component={ApparelDescription}/>
         )}
+        <div> {} </div>
       </div>
     )
-  }
-
-  async populateMerchData(merchType) {
-    const formData = new FormData();
-    formData.append('name', merchType);
-
-    const response = await fetch('/api/Merch', {
-        method: 'POST',
-        body: formData
-    })
-
-    const data = await response.json();
-    this.setState({ merch: data, loading: false, merchObject: [], matchPath: [], name: "", caption: "", exactPath: `${this.props.match.path}/`});
   }
 
   overrideLocation() {
@@ -228,22 +237,7 @@ export class Merch extends React.Component {
     this.location = location
   }
 
-  formatMerchData() {
-    this.state.merch.map(merch => {
-      this.state.name = merch.name;
-      this.state.caption = merch.caption;
-      
-      for (var i in merch.matchPaths) {
-        this.state.matchPath.push(eval(merch.matchPaths[i]));
-      }
-      var j = 0;
-      for (var i in merch.merchObject) {
-        merch.merchObject[i][merch.merchObject[i].length - 1] = this.state.matchPath[j];
-        this.state.merchObject.push(merch.merchObject[i]);
-        j++;
-      }
-    })
-  }
+
 }
 
 export class ApparelDescription extends React.Component {

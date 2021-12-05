@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TShirtType from './TShirtTypes.js';
-import Description from './jsx/Description.jsx';
+import Description from './jsx/Description.js';
 import qwertyVideo from '../videos/qwertyVideo.mp4';
 
 export class MerchPage extends Component{
@@ -25,15 +25,12 @@ export class MerchPage extends Component{
         var items = <Description 
           video={qwertyVideo} 
           projectName="1801GD T-SHIRT"
-          caption="Hamming Encoding"
+          caption="Garment Dye Heavy Cotton"
           p1="This Web Proxy was originally created for the necessity of searching up websites under my high school wifi. As a result, most websites under the school wifi are blocked so a web proxy would save the day. Until, of course, one day it would finally become a blocked website as well."
-          p2="This project was created with the Flask web server. This application works by HTTP requesting a website to grab its HTML under a given search string. As a result, once the application has the HTMl it could use the css and js links to fully render the site. It does this by integrating this servers domain in front of the css and js links in the HTML so that way it could request the css and js from my server. It of course does not work for every single website, but it still needs work to be done."
-          p3="Overall, this project was a pain at first, trying to figure out how to render the HTML and css, but it was really fun in my opinion. Check out the code on my GitHub and also check out my website! ❤️ Links above."
           website={ <p><a class="button">View Design</a> </p>}
           link="https://docs.google.com/document/d/1TV7tv_EihiZ0EpDRFjV8yQ-Bk1MdsqCt-646f9M02Vk/edit?usp=sharing"
           gitLink="https://github.com/isebasus/hamming/"
         ></Description>
-
         wrapper = <Columns items={items} placement=""></Columns>
       }
 
@@ -67,7 +64,6 @@ export class MerchPage extends Component{
       )
     }
   }
-
 
   export class Columns extends React.Component {
 
