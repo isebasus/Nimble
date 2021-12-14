@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import TShirtType from './TShirtTypes.js';
 import Description from './jsx/Description.js';
 import qwertyVideo from '../videos/qwertyVideo.mp4';
+import { BrowserRouter as Router, Route, Switch, Link, useLocation, useParams} from "react-router-dom";
+import data from "../data/data.json";
 
 export class MerchPage extends Component{
 
@@ -15,21 +17,38 @@ export class MerchPage extends Component{
   
     render(){
       var wrapper;
+      var name = "";
+      var caption = "";
+      var p1 = "";
+      var image = "";
+      var colors = [];
+      var sizes = [];
       if (this.props.merch != null) {
         var items = Object.entries(this.props.merch).map(([key, value]) => 
           <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]} history={this.props.history} match={value[4]}></TShirtType>
         );
-
         wrapper = <Columns items={items} placement="columns"></Columns>
       } else {
+        data.map((data) => {
+          if (data.id == this.props.location) {
+            name = data.name;
+            caption = data.caption;
+            p1 = data.p1;
+            colors = data.colors;
+            sizes = data.sizes;
+            image = data.image;
+          }
+        })
+
         var items = <Description 
           video={qwertyVideo} 
-          projectName="1801GD T-SHIRT"
-          caption="Garment Dye Heavy Cotton"
-          p1="This Web Proxy was originally created for the necessity of searching up websites under my high school wifi. As a result, most websites under the school wifi are blocked so a web proxy would save the day. Until, of course, one day it would finally become a blocked website as well."
+          projectName={name}
+          caption={caption}
+          p1={p1}
+          colors={colors}
+          image={image}
+          sizes={sizes}
           website={ <p><a class="button">View Design</a> </p>}
-          link="https://docs.google.com/document/d/1TV7tv_EihiZ0EpDRFjV8yQ-Bk1MdsqCt-646f9M02Vk/edit?usp=sharing"
-          gitLink="https://github.com/isebasus/hamming/"
         ></Description>
         wrapper = <Columns items={items} placement=""></Columns>
       }

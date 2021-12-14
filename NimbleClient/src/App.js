@@ -219,14 +219,13 @@ export class Merch extends React.Component {
 
     return (
       <div>
-        <MerchPage name={name} caption={caption} merch={merch} history={this.props.history} matchPath={matchPath}></MerchPage>
+        <MerchPage name={name} caption={caption} merch={merch} history={this.props.history} matchPath={matchPath} location={this.props.location.pathname}></MerchPage>
         <Switch location={this.location}>
           <Route exact path={exactPath} component={this} />
         </Switch>
         {matchPath.map((path) => 
           <Route path={path} component={ApparelDescription}/>
         )}
-        <div> {} </div>
       </div>
     )
   }
