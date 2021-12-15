@@ -176,10 +176,7 @@ export class Merch extends React.Component {
       case '/los-angeles-apparel':
         name = "Los Angeles Apparel"
         caption = "The best merch made in the USA."
-
-        const hello = "`${this.props.match.path}/1801gd`";
-
-        matchPath = [eval(hello), `${this.props.match.path}/1809gd`, `${this.props.match.path}/hf09`, `${this.props.match.path}/hf10`]
+        matchPath = [`${this.props.match.path}/1801gd`, `${this.props.match.path}/1809gd`, `${this.props.match.path}/hf09`, `${this.props.match.path}/hf10`]
         merch = {
           GarmentDiedTshirt: ["laa", ['#914637', '#e30e11', '#2e9e50', '#eb6134', '#eb9ba8', '#7da88a', '#1704bf', '#88a2cf', '#030303', '#d9d9d9', '#f7f7f7'], "1801GD T-SHIRT", "$16 / SHIRT", matchPath[0]],
           PocketTShirt: ["gildan", ['#914637', '#e30e11', '#2e9e50'], "1809GD T-SHIRT", "$16 / SHIRT", matchPath[1]],

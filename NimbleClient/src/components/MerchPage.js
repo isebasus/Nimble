@@ -29,8 +29,9 @@ export class MerchPage extends Component{
         );
         wrapper = <Columns items={items} placement="columns"></Columns>
       } else {
+        var endpoint = this.props.location.substring(this.props.location.lastIndexOf('/') + 1);
         data.map((data) => {
-          if (data.id == this.props.location) {
+          if (data.id == endpoint) {
             name = data.name;
             caption = data.caption;
             p1 = data.p1;
@@ -48,6 +49,7 @@ export class MerchPage extends Component{
           colors={colors}
           image={image}
           sizes={sizes}
+          history={this.props.history}
           website={ <p><a class="button">View Design</a> </p>}
         ></Description>
         wrapper = <Columns items={items} placement=""></Columns>

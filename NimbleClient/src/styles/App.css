@@ -428,6 +428,10 @@ h2{
   background-image: url(../../src/images/gildanMerch.jpeg);
 }
 
+#laaLogo {
+  background-image: url(../../src/images/laahoodie.png);
+}
+
 
 .columns{
   display: grid;
@@ -713,7 +717,43 @@ a{
     transition: all .15s ease 0s;
 }
 
+.sizeButtonChanged {
+  display: inline;
+  margin-right: 10px;
+  padding: 12px 20px;
+    border-radius: 4px;
+    border: none;
+    max-width: 40px;
+    color: rgba(0, 0, 0, 1);
+    background-color: rgb(0, 0, 0, 0.2);
+    cursor: pointer;
+    opacity: 1;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-top: -30px;
+    transition: all .15s ease 0s;
+}
+
+.sizeButton:hover{
+  color: rgba(0, 0, 0, 1);
+  background-color: rgb(0, 0, 0, 0.15);
+}
+
 .palette:hover {
+  -webkit-transform: translateY(-1.5px);
+  -ms-transform: translateY(-1.5px);
+  transform: translateY(-1.5px);
+}
+
+.paletteChanged {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline;
+  float: left;
+  margin-right: 5px;
+  padding-top: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   -webkit-transform: translateY(-1.5px);
   -ms-transform: translateY(-1.5px);
   transform: translateY(-1.5px);
