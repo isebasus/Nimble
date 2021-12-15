@@ -11,6 +11,7 @@
     "@toast-ui/editor": "^3.0.3",
     "axios": "^0.23.0",
     "history": "^4.10.1",
+    "json": "^11.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dynamic-import": "^1.1.5",

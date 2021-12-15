@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import TShirtType from './TShirtTypes.js';
 import Description from './jsx/Description.js';
 import qwertyVideo from '../videos/qwertyVideo.mp4';
-import { BrowserRouter as Router, Route, Switch, Link, useLocation, useParams} from "react-router-dom";
 import data from "../data/data.json";
 
 export class MerchPage extends Component{
@@ -40,10 +39,10 @@ export class MerchPage extends Component{
             image = data.image;
           }
         })
-
-        var items = <Description 
+        var items = <Description
+          id={data.id} 
           video={qwertyVideo} 
-          projectName={name}
+          name={name}
           caption={caption}
           p1={p1}
           colors={colors}
@@ -77,12 +76,19 @@ export class MerchPage extends Component{
                       <a class="navItems">Builder</a>
                       <a class="navItems">Order</a>
                 </nav>
+                <div className="links" style={{marginTop: "20px", marginBottom: "-20px"}}>
+                    <a className="li" onClick={this.goBack.bind(this)}>&larr; Back</a>
+                </div>
                 <h1 className="first">{this.props.name}<a id="text"></a></h1>
                 <h2 className="caption">{this.props.caption}</h2>
                 {wrapper}
               </div>
         </div>
       )
+    }
+
+    goBack(){
+      this.props.history.goBack();
     }
   }
 

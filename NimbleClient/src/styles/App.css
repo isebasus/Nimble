@@ -700,6 +700,12 @@ a{
   text-align: center;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .sizeButton{
   display: inline;
   margin-right: 10px;

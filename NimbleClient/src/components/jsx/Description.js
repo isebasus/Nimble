@@ -1,18 +1,16 @@
 import React, { Component} from 'react';
+import cart from "../../data/cart.json";
 
 export default class Description extends Component {
     constructor(props) {
         super(props);
-        this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), }
+        this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: ""}
     }
 
     render() {
         return(
             <div className="descriptionBody">
-                <div className="links">
-                    <a className="li" onClick={this.goBack.bind(this)}>&larr; Back</a>
-                </div>
-                <h1 className="first2" id="title">{this.props.projectName}</h1>
+                <h1 className="first2" id="title">{this.props.name}</h1>
                 <h2 className="caption" style={{marginBottom: '10px'}} id="pCaption">{this.props.caption}</h2>
                 <div className="box" id={this.props.image}></div>
                 <div className="centerColors">
@@ -28,9 +26,10 @@ export default class Description extends Component {
                 </div>
                 <div className="spacer"></div>
                 <div className="centerColors" style={{marginTop: '-10px', paddingBottom: '0px'}}>
-                    <input className="inputBox" type="text" placeholder="15" style={{marginRight: '10px', display: 'inline'}}/>
-                    <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}}>Add To Cart</a>
+                    <input className="inputBox" min="15" type="number" placeholder="15" style={{marginRight: '10px', display: 'inline'}} onChange={event => this.setState({quantity: event.target.value})}/>
+                    <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}} onClick={this.addToBag.bind(this)}>Add To Cart</a>
                 </div>
+                <h2 className="caption" style={{marginBottom: '0px', fontSize: '20px', marginTop:'30px'}} id="pCaption">{this.state.error}</h2>
                 <h3 id="t-description" classNamclassName="projectDescription">{this.props.p1}</h3>
                 <h3 id="t-description" className="projectDescription">{this.props.p2}</h3>
                 <h3 id="t-description" className="projectDescription">{this.props.p2b}</h3>
@@ -70,7 +69,31 @@ export default class Description extends Component {
     }
 
     addToBag(q) {
-        
+        if (this.state.quantity < 15) {
+            this.setState({error: "You cannot order less than 15 units."});
+            return;
+        }
+
+        if (this.state.color == "") {
+            this.setState({error: "Please choose a color."})
+            return;
+        }
+
+        if (this.state.size == "") {
+            this.setState({error: "Please choose a size."})
+            return;
+        }
+        var data = {
+            "id": this.props.id,
+            "name": this.props.name,
+            "caption": this.props.caption,
+            "color": this.state.color,
+            "size": this.state.size,
+            "qunatity": this.state.quantity,
+            "image": this.props.image
+        }
+        var dataString = JSON.stringify(data);
+        cart.push(dataString);
     }
 
 }
