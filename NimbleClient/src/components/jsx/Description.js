@@ -1,10 +1,19 @@
 import React, { Component} from 'react';
-import cart from "../../data/cart.json";
 
 export default class Description extends Component {
     constructor(props) {
         super(props);
         this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: ""}
+    }
+
+    setWindowState(state, id) {
+        var w = window.localStorage.getItem(id);
+        if (w != null) {
+            var parsedWindow = JSON.parse(w);
+            parsedWindow.quantity += state.quantity;
+            return;
+        }
+        window.localStorage.setItem(id, state);
     }
 
     render() {
@@ -68,19 +77,19 @@ export default class Description extends Component {
         this.setState({size: this.state.size, color: c, quantity: this.state.quantity, buttonSizeState: this.state.buttonSizeState, buttonColorState: changed});
     }
 
-    addToBag(q) {
+    async addToBag(q) {
         if (this.state.quantity < 15) {
             this.setState({error: "You cannot order less than 15 units."});
             return;
         }
 
         if (this.state.color == "") {
-            this.setState({error: "Please choose a color."})
+            this.setState({error: "Please choose a color."});
             return;
         }
 
         if (this.state.size == "") {
-            this.setState({error: "Please choose a size."})
+            this.setState({error: "Please choose a size."});
             return;
         }
         var data = {
@@ -93,7 +102,7 @@ export default class Description extends Component {
             "image": this.props.image
         }
         var dataString = JSON.stringify(data);
-        cart.push(dataString);
+        this.setWindowState(dataString, this.props.id + this.state.color);
     }
 
 }

@@ -13,6 +13,9 @@ namespace nimble
 {
     public class Startup
     {
+
+        public static string _rootPath;
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -51,8 +54,9 @@ namespace nimble
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
-            
+
+            _rootPath = env.ContentRootPath;
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
