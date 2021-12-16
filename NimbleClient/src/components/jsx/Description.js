@@ -6,14 +6,27 @@ export default class Description extends Component {
         this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: ""}
     }
 
-    setWindowState(state, id) {
-        var w = window.localStorage.getItem(id);
+    setWindowState(state) {
+        var w = window.localStorage.getItem('state');
         if (w != null) {
-            var parsedWindow = JSON.parse(w);
-            parsedWindow.quantity += state.quantity;
+            var parsedData = JSON.parse(w);
+            for(var i = 0; i < parsedData.cart.length; i++) {
+                if (parsedData.cart[i].id == state.id) {
+                    parsedData.cart[i].quantity += state.quantity;
+                    window.localStorage.setItem('state', JSON.stringify(parsedData));
+                    return;
+                }
+            }
+
+            parsedData.cart.push(state);
+            window.localStorage.setItem('state', JSON.stringify(parsedData));
             return;
         }
-        window.localStorage.setItem(id, state);
+        var data = {
+            cart: []
+        }
+        data.cart.push(state);
+        window.localStorage.setItem('state', JSON.stringify(data));
     }
 
     render() {
@@ -35,7 +48,7 @@ export default class Description extends Component {
                 </div>
                 <div className="spacer"></div>
                 <div className="centerColors" style={{marginTop: '-10px', paddingBottom: '0px'}}>
-                    <input className="inputBox" min="15" type="number" placeholder="15" style={{marginRight: '10px', display: 'inline'}} onChange={event => this.setState({quantity: event.target.value})}/>
+                    <input className="inputBox" min="15" type="number" placeholder="15" style={{marginRight: '10px', display: 'inline'}} onChange={event => this.setState({quantity: parseInt(event.target.value)})}/>
                     <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}} onClick={this.addToBag.bind(this)}>Add To Cart</a>
                 </div>
                 <h2 className="caption" style={{marginBottom: '0px', fontSize: '20px', marginTop:'30px'}} id="pCaption">{this.state.error}</h2>
@@ -93,16 +106,15 @@ export default class Description extends Component {
             return;
         }
         var data = {
-            "id": this.props.id,
+            "id": this.props.name + this.state.color + this.state.size,
             "name": this.props.name,
             "caption": this.props.caption,
             "color": this.state.color,
             "size": this.state.size,
-            "qunatity": this.state.quantity,
+            "quantity": this.state.quantity,
             "image": this.props.image
         }
-        var dataString = JSON.stringify(data);
-        this.setWindowState(dataString, this.props.id + this.state.color);
+        this.setWindowState(data);
     }
 
 }
