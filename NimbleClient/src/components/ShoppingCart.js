@@ -2,28 +2,33 @@ import React, { Component } from 'react';
 import CartItem from './CartItem.js';
 
 export default class ShoppingCart extends Component {
-
-    static props = null;
-
     constructor(props) {
         super(props);
-        this.props = props;
+        this.state = JSON.parse(window.localStorage.getItem('state')) || {
+            cart: []
+        }
+    }
+
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            if (window.localStorage.getItem('state') != null) {
+                this.setState(JSON.parse(window.localStorage.getItem('state')));
+            } else {
+                this.setState({cart: []});
+            }
+        }, 500)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
     
     render() {
         return (
-            <div className="shoppingMargin">
-                <div className="expander">
-                    <div className="shoppingCart">
-                        <h2 className="cartTitle">BASKET</h2>
-                        <a></a>
-                        <CartItem type="5041GD SHIRT" ammount="24"/>
-                        <CartItem type="5041GD SHIRT" ammount="24"/>
-                        <CartItem type="5041GD SHIRT" ammount="24"/>
-                        <CartItem type="5041GD SHIRT" ammount="24"/>
-                        <CartItem type="5041GD SHIRT" ammount="24"/>
-                    </div>
-                </div>
+            <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden"}} onMouseOver={this.props.handleMouseOver} onMouseOut={this.props.handleMouseOut}>
+                  {this.state.cart.map((item, i) => 
+                    <CartItem name={item.name} color={item.color} units={item.quantity}></CartItem>
+                  )}
             </div>
         );
     }

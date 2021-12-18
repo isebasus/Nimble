@@ -3,7 +3,7 @@ import TShirtType from './TShirtTypes.js';
 import Description from './jsx/Description.js';
 import qwertyVideo from '../videos/qwertyVideo.mp4';
 import data from "../data/data.json";
-import Header from "./Header.js";
+import Basket from './Basket.js';
 
 export class MerchPage extends Component{
 
@@ -57,7 +57,7 @@ export class MerchPage extends Component{
 
       return(
         <div className="body">
-              <Header></Header>
+              <Basket></Basket>
               <div className="merch">
                 <nav className="navBar">
                       <a class="navItems">Home</a>
@@ -70,7 +70,9 @@ export class MerchPage extends Component{
                     <a className="li" onClick={this.goBack.bind(this)}>&larr; Back</a>
                 </div>
                 <h1 className="first">{this.props.name}<a id="text"></a></h1>
-                <h2 className="caption">{this.props.caption}</h2>
+                <h2 className="caption" style={{marginBottom: "45px"}}>{this.props.caption}</h2>
+                <div className="" style={{display: 'inline'}}>
+                </div>
                 {wrapper}
               </div>
         </div>

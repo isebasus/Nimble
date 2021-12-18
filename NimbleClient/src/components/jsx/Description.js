@@ -115,6 +115,7 @@ export default class Description extends Component {
             "image": this.props.image
         }
         this.setWindowState(data);
+        this.setState({error: "Added " + this.state.quantity + " units to bag."});
     }
 
 }
