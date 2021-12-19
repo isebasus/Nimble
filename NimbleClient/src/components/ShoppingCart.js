@@ -25,7 +25,7 @@ export default class ShoppingCart extends Component {
     
     render() {
         return (
-            <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden"}} onMouseOver={this.props.handleMouseOver} onMouseOut={this.props.handleMouseOut}>
+            <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden"}}>
                   {this.state.cart.map((item, i) => 
                     <CartItem name={item.name} color={item.color} units={item.quantity}></CartItem>
                   )}
