@@ -8,6 +8,19 @@ export default class CartItem extends Component {
         super(props);
         this.props = props;
     }
+
+    removeItem() {
+        var data = {
+            cart: []
+        }
+        var parsedData = JSON.parse(window.localStorage.getItem('state'));
+        for (var i = 0; i < parsedData.cart.length; i++) {
+            if (!(parsedData.cart[i].id == this.props.name + this.props.color + this.props.size)) {
+                data.cart.push(parsedData.cart[i]);
+            }
+        }
+        window.localStorage.setItem('state', JSON.stringify(data));
+    }
     
     render() {
         return (
@@ -17,9 +30,10 @@ export default class CartItem extends Component {
                     <div className="palette" style={{background: `${this.props.color}`, cursor: 'pointer'}}></div>
                 </div>
                 <div className="spacer"></div>
-                <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", float: "left"}} id="pCaption">{this.props.units} units</h2>
-                <div className="links" style={{marginTop: "30px"}}>
-                    <a className="li" style={{fontSize: "1rem", float: "right", marginRight: "5px"}}>✖ remove</a>
+                <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", float: "left"}} id="pCaption">size: {this.props.size}</h2>
+                <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", float: "left", marginLeft: "10px"}} id="pCaption">{this.props.units} units</h2>
+                <div className="links" style={{marginTop: "50px"}}>
+                    <a className="li" style={{fontSize: "1rem", float: "right", marginRight: "5px"}} onClick={this.removeItem.bind(this)}>✖ remove</a>
                 </div>
             </div>
         );
@@ -27,9 +41,5 @@ export default class CartItem extends Component {
 
     visitPage(e) {
         return;
-    }
-
-    search(e){
-        this.props.history.push(this.props.matchPath);
     }
 }

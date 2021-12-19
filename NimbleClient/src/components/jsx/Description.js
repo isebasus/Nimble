@@ -17,7 +17,6 @@ export default class Description extends Component {
                     return;
                 }
             }
-
             parsedData.cart.push(state);
             window.localStorage.setItem('state', JSON.stringify(parsedData));
             return;

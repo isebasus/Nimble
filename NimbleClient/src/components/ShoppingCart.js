@@ -7,14 +7,17 @@ export default class ShoppingCart extends Component {
         this.state = JSON.parse(window.localStorage.getItem('state')) || {
             cart: []
         }
+        this.status = window.localStorage.getItem('state') == null ? "Empty Basket" : "";
     }
 
     componentDidMount() {
         this.interval = setInterval(() => {
-            if (window.localStorage.getItem('state') != null) {
+            if (window.localStorage.getItem('state') != null && JSON.parse(window.localStorage.getItem('state')).cart.length > 0) {
                 this.setState(JSON.parse(window.localStorage.getItem('state')));
+                this.status = "";
             } else {
                 this.setState({cart: []});
+                this.status = "Empty Basket";
             }
         }, 500)
     }
@@ -26,8 +29,9 @@ export default class ShoppingCart extends Component {
     render() {
         return (
             <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden"}}>
+                  {this.status}
                   {this.state.cart.map((item, i) => 
-                    <CartItem name={item.name} color={item.color} units={item.quantity}></CartItem>
+                    <CartItem name={item.name} color={item.color} units={item.quantity} size={item.size}></CartItem>
                   )}
             </div>
         );
