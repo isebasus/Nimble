@@ -27,7 +27,7 @@ export default class ShoppingCart extends Component {
     }
 
     addMockups() {
-        return;
+        this.props.history.push('/add-mockups');
     }
     
     render() {

@@ -10,6 +10,7 @@ import Description from './components/jsx/Description.js';
 import {FetchData} from './components/FetchData.js';
 import Header from './components/Header.js';
 import Basket from './components/Basket.js';
+import Mockup from './components/Mockup.js'
 import './styles/App.css';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path={"/gildan-apparel"} component={Merch}></Route>
           <Route path={"/comfort-colors-apparel"} component={Merch}></Route>
           <Route path={"/alstyle-apparel"} component={Merch}></Route>
+          <Route path={"/add-mockups"} component={Mockup}></Route>
         </Switch>
       </div>
     </Router>
@@ -42,7 +44,7 @@ class Home extends React.Component {
   render(){
     return (
       <header className="body">
-        <Header></Header>
+        <Header history={this.props.history}></Header>
         <div className="projects">
 
           <nav className="navBar">
@@ -97,7 +99,7 @@ export class ChooseMerch extends React.Component {
 
     return (
         <div className="body">
-            <Basket></Basket>
+            <Header history={this.props.history}></Header>
             <div className="merch">
                 <nav className="navBar">
                     <a class="navItems">Home</a>

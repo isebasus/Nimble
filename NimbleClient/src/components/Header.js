@@ -42,7 +42,7 @@ export default class Header extends Component {
                 </a>
                 <a class="basket" id="g">
                     <div style={{float: "right"}}>{this.status} Basket</div>
-                    <ShoppingCart></ShoppingCart>
+                    <ShoppingCart history={this.props.history}></ShoppingCart>
                 </a>
                 </nav>
             </div>

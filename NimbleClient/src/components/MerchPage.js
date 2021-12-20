@@ -3,7 +3,7 @@ import TShirtType from './TShirtTypes.js';
 import Description from './jsx/Description.js';
 import qwertyVideo from '../videos/qwertyVideo.mp4';
 import data from "../data/data.json";
-import Basket from './Basket.js';
+import Header from './Header.js';
 
 export class MerchPage extends Component{
 
@@ -57,7 +57,7 @@ export class MerchPage extends Component{
 
       return(
         <div className="body">
-              <Basket></Basket>
+              <Header history={this.props.history}></Header>
               <div className="merch">
                 <nav className="navBar">
                       <a class="navItems">Home</a>

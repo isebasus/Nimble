@@ -9,7 +9,7 @@ export default class Basket extends Component {
     render() {
         return (
             <div>
-                <Header></Header>
+                <Header history={this.props.history} location={this.props.location}></Header>
             </div>
         );
     }
