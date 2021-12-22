@@ -3,7 +3,7 @@ import React, { Component} from 'react';
 export default class Description extends Component {
     constructor(props) {
         super(props);
-        this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: ""}
+        this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: "", added: "Add to Cart"}
     }
 
     setWindowState(state) {
@@ -31,8 +31,8 @@ export default class Description extends Component {
     render() {
         return(
             <div className="descriptionBody">
-                <h1 className="first2" id="title">{this.props.name}</h1>
-                <h2 className="caption" style={{marginBottom: '10px'}} id="pCaption">{this.props.caption}</h2>
+                <h1 className="first2" id="title" style={{marginBottom: "10px"}}>{this.props.name}</h1>
+                <h2 className="caption" style={{marginBottom: "10px", fontSize:"2.4rem", color: "rgba(0, 0, 0, 0.58)"}} id="pCaption"><a className="tprice">＄{this.props.price} USD / SHIRT</a></h2>
                 <div className="box" id={this.props.image}></div>
                 <div className="centerColors">
                     {this.props.sizes.map((size, i) => 
@@ -48,7 +48,7 @@ export default class Description extends Component {
                 <div className="spacer"></div>
                 <div className="centerColors" style={{marginTop: '-10px', paddingBottom: '0px'}}>
                     <input className="inputBox" min="15" type="number" placeholder="15" style={{marginRight: '10px', display: 'inline'}} onChange={event => this.setState({quantity: parseInt(event.target.value)})}/>
-                    <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}} onClick={this.addToBag.bind(this)}>Add To Cart</a>
+                    <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}} onClick={this.addToBag.bind(this)}>{this.state.added}</a>
                 </div>
                 <h2 className="caption" style={{marginBottom: '0px', fontSize: '20px', marginTop:'30px'}} id="pCaption">{this.state.error}</h2>
                 <h3 id="t-description" classNamclassName="projectDescription">{this.props.p1}</h3>
@@ -66,6 +66,8 @@ export default class Description extends Component {
     }
 
     setSize(s, i) {
+        this.setState({added: "Add to Cart"});
+
         var changed = [];
         for(var j = 0; j < this.state.buttonSizeState.length; j++) {
             if (j == i) {
@@ -78,6 +80,8 @@ export default class Description extends Component {
     }
 
     setColor(c, i) {
+        this.setState({added: "Add to Cart"});
+
         var changed = [];
         for(var j = 0; j < this.state.buttonColorState.length; j++) {
             if (j == i) {
@@ -90,11 +94,6 @@ export default class Description extends Component {
     }
 
     async addToBag(q) {
-        if (this.state.quantity < 15) {
-            this.setState({error: "You cannot order less than 15 units."});
-            return;
-        }
-
         if (this.state.color == "") {
             this.setState({error: "Please choose a color."});
             return;
@@ -111,10 +110,11 @@ export default class Description extends Component {
             "color": this.state.color,
             "size": this.state.size,
             "quantity": this.state.quantity,
-            "image": this.props.image
+            "image": this.props.image,
+            "price": this.props.price
         }
         this.setWindowState(data);
-        this.setState({error: "Added " + this.state.quantity + " units to bag."});
+        this.setState({added: "Added!"});
     }
 
 }

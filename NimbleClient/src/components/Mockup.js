@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header.js';
-import CartItem from './CartItem.js';
+import MockupItem from './MockupItem';
 
 export default class Mockup extends Component {
     constructor(props) {
@@ -8,7 +8,6 @@ export default class Mockup extends Component {
         this.state = JSON.parse(window.localStorage.getItem('state')) || {
             cart: []
         }
-        this.status = window.localStorage.getItem('state') == null ? "" : this.state.cart.length + "x";
     }
 
     componentDidMount() {
@@ -19,10 +18,8 @@ export default class Mockup extends Component {
 
             if (JSON.parse(window.localStorage.getItem('state')).cart.length > 0) {
                 this.setState(JSON.parse(window.localStorage.getItem('state')));
-                this.status = this.state.cart.length + "x";
             } else {
                 this.setState({cart: []});
-                this.status = "";
             }
         }, 500)
     }
@@ -34,7 +31,7 @@ export default class Mockup extends Component {
     render() {
         var display;
         if (this.state.cart.length == 0) {
-            display = <h2 className="caption" >Please add items to your cart.</h2>
+            display = <h2 className="caption" >You have an empty cart.</h2>
         } else {
             display = <Items></Items>
         }
@@ -50,6 +47,7 @@ export default class Mockup extends Component {
                       <a class="navItems">Builder</a>
                       <a class="navItems">Order</a>
                 </nav>
+                <h1 className="first">Add Some Mockups<a id="text"></a></h1>
                 {display}
               </div>
         </div>
@@ -85,14 +83,20 @@ export class Items extends React.Component {
     }
 
     render(){
+        var price = 0;
+        this.state.cart.map((item) => {
+            price += (item.price * item.quantity);
+        });
       return (
         <div>
-                <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%"}}>
-                  {this.state.cart.map((item, i) => 
-                    <CartItem name={item.name} color={item.color} units={item.quantity} size={item.size}></CartItem>
-                  )}
-                </div>
+            <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%"}}>
+                {this.state.cart.map((item) => 
+                    <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image}></MockupItem>
+                )}
+                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a></h2>
             </div>
+            
+        </div>
       )
     }
   }

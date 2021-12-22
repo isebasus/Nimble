@@ -23,6 +23,7 @@ export class MerchPage extends Component{
       var image = "";
       var colors = [];
       var sizes = [];
+      var price = 0;
       if (this.props.merch != null) {
         var items = Object.entries(this.props.merch).map(([key, value]) => 
           <TShirtType projectId={value[0]} colors={value[1]} coverId="coverScraper" name={value[2]} price={value[3]} history={this.props.history} match={value[4]}></TShirtType>
@@ -38,6 +39,7 @@ export class MerchPage extends Component{
             colors = data.colors;
             sizes = data.sizes;
             image = data.image;
+            price = data.price;
           }
         })
         var items = <Description
@@ -50,6 +52,7 @@ export class MerchPage extends Component{
           image={image}
           sizes={sizes}
           history={this.props.history}
+          price={price}
           website={ <p><a class="button">View Design</a> </p>}
         ></Description>
         wrapper = <Columns items={items} placement=""></Columns>

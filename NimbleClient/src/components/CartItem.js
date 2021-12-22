@@ -23,6 +23,7 @@ export default class CartItem extends Component {
     }
     
     render() {
+        var price = this.props.units * this.props.price 
         return (
             <div className="item" onClick={this.visitPage.bind(this)}>
                 <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block"}}>
@@ -32,6 +33,7 @@ export default class CartItem extends Component {
                 <div className="spacer"></div>
                 <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", float: "left"}} id="pCaption">size: {this.props.size}</h2>
                 <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", float: "left", marginLeft: "10px"}} id="pCaption">{this.props.units} units</h2>
+                <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "50px", float: "left", marginLeft: "0px", position: "absolute"}} id="pCaption"><a className="tprice">${price}</a></h2>
                 <div className="links" style={{marginTop: "50px"}}>
                     <a className="li" style={{fontSize: "1rem", float: "right", marginRight: "5px"}} onClick={this.removeItem.bind(this)}>✖ remove</a>
                 </div>
