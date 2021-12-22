@@ -6,17 +6,26 @@ export default class Description extends Component {
         this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: "", added: "Add to Cart"}
     }
 
+    generateUUID() { // Public Domain/MIT
+        var d = new Date().getTime();//Timestamp
+        var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16;//random number between 0 and 16
+            if(d > 0){//Use timestamp until depleted
+                r = (d + r)%16 | 0;
+                d = Math.floor(d/16);
+            } else {//Use microseconds since page-load if supported
+                r = (d2 + r)%16 | 0;
+                d2 = Math.floor(d2/16);
+            }
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
     setWindowState(state) {
         var w = window.localStorage.getItem('state');
         if (w != null) {
             var parsedData = JSON.parse(w);
-            for(var i = 0; i < parsedData.cart.length; i++) {
-                if (parsedData.cart[i].id == state.id) {
-                    parsedData.cart[i].quantity += state.quantity;
-                    window.localStorage.setItem('state', JSON.stringify(parsedData));
-                    return;
-                }
-            }
             parsedData.cart.push(state);
             window.localStorage.setItem('state', JSON.stringify(parsedData));
             return;
@@ -104,7 +113,7 @@ export default class Description extends Component {
             return;
         }
         var data = {
-            "id": this.props.name + this.state.color + this.state.size,
+            "id": this.generateUUID(),
             "name": this.props.name,
             "caption": this.props.caption,
             "color": this.state.color,

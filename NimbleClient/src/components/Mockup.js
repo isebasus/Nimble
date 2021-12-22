@@ -91,7 +91,7 @@ export class Items extends React.Component {
         <div>
             <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%"}}>
                 {this.state.cart.map((item) => 
-                    <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image}></MockupItem>
+                    <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
                 )}
                 <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a></h2>
             </div>

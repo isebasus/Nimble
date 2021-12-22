@@ -15,7 +15,7 @@ export default class MockupItem extends Component {
         }
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
-            if (!(parsedData.cart[i].id == this.props.name + this.props.color + this.props.size)) {
+            if (!(parsedData.cart[i].id == this.props.id)) {
                 data.cart.push(parsedData.cart[i]);
             }
         }

@@ -35,8 +35,8 @@ export default class ShoppingCart extends Component {
             <div>
                 <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden"}}>
                   {this.status}
-                  {this.state.cart.map((item, i) => 
-                    <CartItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price}></CartItem>
+                  {this.state.cart.map((item) => 
+                    <CartItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} id={item.id}></CartItem>
                   )}
                   <a class="sizeButton" style={{marginTop: "0px", maxWidth: "100%", marginRight: "0px"}} onClick={this.addMockups.bind(this)}>Create Mockups</a>
                 </div>
