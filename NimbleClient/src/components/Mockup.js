@@ -82,6 +82,10 @@ export class Items extends React.Component {
         clearInterval(this.interval);
     }
 
+    checkout() {
+        return;
+    }
+
     render(){
         var price = 0;
         this.state.cart.map((item) => {
@@ -93,7 +97,7 @@ export class Items extends React.Component {
                 {this.state.cart.map((item) => 
                     <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
                 )}
-                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a></h2>
+                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout}>Checkout</a></h2>
             </div>
             
         </div>

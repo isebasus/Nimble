@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 
 export default class MockupItem extends Component {
-
-    static props = null;
-
     constructor(props) {
         super(props);
-        this.props = props;
     }
 
     removeItem() {
@@ -23,11 +19,9 @@ export default class MockupItem extends Component {
     }
     
     render() {
-
         var price = this.props.units * this.props.price;
-
         return (
-            <div className="item" style={{cursor: "default", height: '190px', position: "relative", width: "100%"}} onClick={this.visitPage.bind(this)}>
+            <div className="item" style={{cursor: "default", height: '200px', position: "relative", width: "100%"}} onClick={this.visitPage.bind(this)}>
                 <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block", height: "100%", position: "relative", width: "100%"}}>
                     <div className="box" style={{width: "20%", height: "100px", objectFit: "cover", borderRadius: "10px", display: "inline", textAlign: "left", marginBottom: "0px", left: "0px", marginRight: "10px", float: "left"}} id={this.props.image}></div>
                     <div style={{position: "relative", display: "inline", float: 'left', width: "300x", height: "100%"}}>
@@ -42,8 +36,9 @@ export default class MockupItem extends Component {
                     </div>
                     
                 </div>
-                <a class="button" style={{position: "absolute", top: "50px", right: "10px"}}>Add Mockup</a>
-                <a class="button" style={{position: "absolute", top: "105px", right: "10px"}}>Add Vector File</a>
+                <input className="inputBox" type="text" placeholder="Notes: " style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.setState({quantity: parseInt(event.target.value)})}/>
+                <MockupFile id={this.props.id}/>
+                <VectorFile id={this.props.id}/>
                 <div className="links" style={{marginTop: "50px", position: "absolute", right: "20px", bottom: "-20px"}}>
                     <a className="li" style={{fontSize: "1rem", float: "right", marginRight: "5px"}} onClick={this.removeItem.bind(this)}>✖ remove</a>
                 </div>
@@ -53,5 +48,87 @@ export default class MockupItem extends Component {
 
     visitPage(e) {
         return;
+    }
+}
+
+class MockupFile extends Component {
+    constructor(props) {
+        super(props);
+        this.inputReference = React.createRef();
+        var data = JSON.parse(window.localStorage.getItem('state'));
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].id == this.props.id) {
+                this.state = data[i].mockup != undefined ? {mockup: "Mockup Added!"} : {mockup: "Add Mockup"};
+            }
+        }
+    }
+
+    onFileChangeCapture(e) {
+        /*Selected files data can be collected here.*/
+        console.log(e.target.files[0]);
+        this.setState({mockup: "Mockup Added!"});
+
+        var parsedData = JSON.parse(window.localStorage.getItem('state'));
+        for (var i = 0; i < parsedData.length; i++) {
+            if (parsedData[i].id == this.props.id) {
+                parsedData[i].mockup = e.target.files[0];
+                window.localStorage.setItem('state', JSON.stringify(parsedData));
+                return;
+            }
+        }
+
+    };
+
+    onBtnClick = () => {
+        /*Collecting node-element and performing click*/
+        this.inputReference.current.click();
+    };
+
+    render() {
+        return (
+            <form>
+                <input
+                type="file"
+                ref={this.inputReference}
+                onChangeCapture={this.onFileChangeCapture.bind(this)}
+                style={{display: 'none'}}
+                />
+                <a class="button" style={{position: "absolute", top: "50px", right: "10px"}} onClick={this.onBtnClick}>{this.state.mockup}</a>
+            </form>
+        )
+    }
+}
+
+class VectorFile extends Component {
+    constructor(props) {
+        super(props);
+        this.inputReference = React.createRef();
+        this.state = {vector: "Add Vector File"};
+    }
+
+    onFileChangeCapture(e) {
+        /*Selected files data can be collected here.*/
+        console.log(e.target.files[0]);
+        this.setState({vector: "Vector File Added!"})
+         
+    };
+
+    onBtnClick = () => {
+        /*Collecting node-element and performing click*/
+        this.inputReference.current.click();
+    };
+
+    render() {
+        return (
+            <form>
+                <input
+                type="file"
+                ref={this.inputReference}
+                onChangeCapture={this.onFileChangeCapture.bind(this)}
+                style={{display: 'none'}}
+                />
+                <a class="button" style={{position: "absolute", top: "105px", right: "10px"}} onClick={this.onBtnClick}>{this.state.vector}</a>
+            </form>
+        )
     }
 }

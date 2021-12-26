@@ -56,7 +56,7 @@ export default class Description extends Component {
                 </div>
                 <div className="spacer"></div>
                 <div className="centerColors" style={{marginTop: '-10px', paddingBottom: '0px'}}>
-                    <input className="inputBox" min="15" type="number" placeholder="15" style={{marginRight: '10px', display: 'inline'}} onChange={event => this.setState({quantity: parseInt(event.target.value)})}/>
+                    <input className="inputBox" min="15" type="number" placeholder="15" style={{marginRight: '10px', display: 'inline', maxWidth: "48px"}} onChange={event => this.setState({quantity: parseInt(event.target.value)})}/>
                     <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}} onClick={this.addToBag.bind(this)}>{this.state.added}</a>
                 </div>
                 <h2 className="caption" style={{marginBottom: '0px', fontSize: '20px', marginTop:'30px'}} id="pCaption">{this.state.error}</h2>
@@ -120,7 +120,9 @@ export default class Description extends Component {
             "size": this.state.size,
             "quantity": this.state.quantity,
             "image": this.props.image,
-            "price": this.props.price
+            "price": this.props.price,
+            "mockup": undefined,
+            "vector": undefined
         }
         this.setWindowState(data);
         this.setState({added: "Added!"});
