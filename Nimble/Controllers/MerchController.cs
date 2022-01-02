@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -22,9 +23,11 @@ namespace nimble.Controllers
         
         [Route("/api/Merch")]
         [HttpPost]
-        public IEnumerable<Merch> Post([FromForm] String name)
+        public bool Post([FromForm] IFormCollection data)
         {
-            return _merch.Find(m => m.Name == name).ToList();
+            var cart = JsonConvert.DeserializeObject<Cart[]>(data["data"]);
+            Console.WriteLine(cart[0].name);
+            return true;
         }
 
         [Route("/api/Cart")]

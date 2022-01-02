@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './Header.js';
 import MockupItem from './MockupItem';
 
-export default class Mockup extends Component {
+export default class Checkout extends Component {
     constructor(props) {
         super(props);
         this.state = JSON.parse(window.localStorage.getItem('state')) || {
@@ -33,7 +33,7 @@ export default class Mockup extends Component {
         if (this.state.cart.length == 0) {
             display = <h2 className="caption" >You have an empty cart.</h2>
         } else {
-            display = <Items history={this.props.history}></Items>
+            display = <Items></Items>
         }
 
         return (
@@ -47,7 +47,7 @@ export default class Mockup extends Component {
                       <a class="navItems">Builder</a>
                       <a class="navItems">Order</a>
                 </nav>
-                <h1 className="first" style={{fontSize: "4.5rem"}}>Upload Your Design<a id="text"></a></h1>
+                <h1 className="first">Add Some Mockups<a id="text"></a></h1>
                 {display}
               </div>
         </div>
@@ -59,12 +59,10 @@ export class Items extends React.Component {
 
     constructor(props) {
         super(props);
-        
-        var data = JSON.parse(window.localStorage.getItem('state'));
-        data.checkout = "";
-        this.state = data || {
+        this.state = JSON.parse(window.localStorage.getItem('state')) || {
             cart: []
         }
+        this.checkout = "Checkout";
     }
 
     componentDidMount() {
@@ -92,25 +90,13 @@ export class Items extends React.Component {
             if (parsedData.cart[i].mockup != undefined && parsedData.cart[i].vector != undefined) {
                 count++;
             }
-
-            if (parsedData.cart[i].mockup == undefined && parsedData.cart[i].vector != undefined) {
-                this.setState({checkout: "A mockup is missing."});
-                return;
-            }
-
-            if (parsedData.cart[i].mockup != undefined && parsedData.cart[i].vector == undefined) {
-                this.setState({checkout: "A vector file is missing."});
-                return;
-            }
         }
 
         if (count >= 1) {
-            this.sendData(parsedData);
-            //this.props.history.push('/checkout');
-            return;
+            this.props.history.push('/checkout');
         }
 
-        this.setState({checkout: "Please add atleast one mockup and vector file."});
+        this.checkout = "Please add atleast one mockup and vector file."
     }
 
     render(){
@@ -124,32 +110,10 @@ export class Items extends React.Component {
                 {this.state.cart.map((item) => 
                     <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
                 )}
-                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout.bind(this)}>Checkout</a></h2>
-                <h2 className="caption" style={{marginBottom: "0px", fontSize:"1rem", color: "rgba(0, 0, 0, 0.58)", marginTop: "0px", textAlign: "right"}} id="pCaption"><a className="tprice">{this.state.checkout}</a></h2>
+                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout}>{this.checkout}</a></h2>
             </div>
             
         </div>
       )
-    }
-
-    async sendData(data) {
-        const formData = new FormData();
-
-        for (var i = 0; i < data.cart.length; i++) {
-            if (data.cart[i].mockup != undefined && data.cart[i].vector != undefined) {
-                return;
-            }
-        }
-
-        formData.append('data', JSON.stringify(data.cart));
-
-        const response = await fetch('/api/Merch', {
-            method: 'POST',
-            body: formData
-        })
-
-        const status = await response.json();
-        console.log(status);
-        
     }
   }

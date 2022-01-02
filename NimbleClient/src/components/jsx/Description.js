@@ -3,7 +3,7 @@ import React, { Component} from 'react';
 export default class Description extends Component {
     constructor(props) {
         super(props);
-        this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: "", added: "Add to Cart"}
+        this.state = {size: "", color: "", quantity: 15, buttonSizeState: Array(this.props.sizes.length).fill("sizeButton"), buttonColorState: Array(this.props.colors.length).fill("palette"), error: "", added: "Add to Cart", url: null, progress: 0}
     }
 
     generateUUID() { // Public Domain/MIT
@@ -36,7 +36,6 @@ export default class Description extends Component {
         data.cart.push(state);
         window.localStorage.setItem('state', JSON.stringify(data));
     }
-
     render() {
         return(
             <div className="descriptionBody">
@@ -120,9 +119,7 @@ export default class Description extends Component {
             "size": this.state.size,
             "quantity": this.state.quantity,
             "image": this.props.image,
-            "price": this.props.price,
-            "mockup": undefined,
-            "vector": undefined
+            "price": this.props.price
         }
         this.setWindowState(data);
         this.setState({added: "Added!"});

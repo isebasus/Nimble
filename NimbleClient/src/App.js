@@ -10,7 +10,8 @@ import Description from './components/jsx/Description.js';
 import {FetchData} from './components/FetchData.js';
 import Header from './components/Header.js';
 import Basket from './components/Basket.js';
-import Mockup from './components/Mockup.js'
+import Mockup from './components/Mockup.js';
+import Checkout from './components/Checkout.js';
 import './styles/App.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path={"/comfort-colors-apparel"} component={Merch}></Route>
           <Route path={"/alstyle-apparel"} component={Merch}></Route>
           <Route path={"/add-mockups"} component={Mockup}></Route>
+          <Route path={"/checkout"} component={Checkout}></Route>
         </Switch>
       </div>
     </Router>

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace nimble.Data.Merch
 {
     public class Cart
@@ -15,5 +17,11 @@ namespace nimble.Data.Merch
         public int quantity { get; set; }
         
         public string image { get; set; }
+        
+        public int price { get; set; }
+        
+        public IFormFile mockup { get; set; }
+        
+        public IFormFile vector { get; set; }
     }
 }
