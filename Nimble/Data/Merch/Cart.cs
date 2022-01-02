@@ -20,8 +20,8 @@ namespace nimble.Data.Merch
         
         public int price { get; set; }
         
-        public IFormFile mockup { get; set; }
+        public string mockup { get; set; }
         
-        public IFormFile vector { get; set; }
+        public string vector { get; set; }
     }
 }

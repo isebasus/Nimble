@@ -1,0 +1,17 @@
+{
+    "los-angeles-apparel": {
+        "1801GD T-SHIRT": 16,
+        "1809GD T-SHIRT": 16,
+        "HF-09 HOODIE":  27,
+        "HF-10 HOODIE": 27
+    }, "gildan-apparel": {
+        "GILDAN T-SHIRT": 16,
+        "HOODIE": 16
+    }, "comfort-colors-apparel": {
+        "COMFORT COLORS T-SHIRT": 16
+    }, "alstyle-apparel": {
+        "AlSTYLE T-SHIRT": 16
+    }, "colors": {
+        "COLORPRICE": 1
+    }
+}

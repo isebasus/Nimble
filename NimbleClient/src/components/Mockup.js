@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from './Header.js';
 import MockupItem from './MockupItem';
+import Loader from "react-loader-spinner";
 
 export default class Mockup extends Component {
     constructor(props) {
@@ -62,6 +63,8 @@ export class Items extends React.Component {
         
         var data = JSON.parse(window.localStorage.getItem('state'));
         data.checkout = "";
+        data.loading = "none";
+        data.check = "Checkout";
         this.state = data || {
             cart: []
         }
@@ -104,6 +107,8 @@ export class Items extends React.Component {
             }
         }
 
+        this.setState({loading: "block", check: ""});
+
         if (count >= 1) {
             this.sendData(parsedData);
             //this.props.history.push('/checkout');
@@ -124,7 +129,7 @@ export class Items extends React.Component {
                 {this.state.cart.map((item) => 
                     <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
                 )}
-                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout.bind(this)}>Checkout</a></h2>
+                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout.bind(this)}>{this.state.check}<Loader style={{display: this.state.loading}} type="ThreeDots" color="#000000" height={8} width={60}timeout={3000} /></a></h2>
                 <h2 className="caption" style={{marginBottom: "0px", fontSize:"1rem", color: "rgba(0, 0, 0, 0.58)", marginTop: "0px", textAlign: "right"}} id="pCaption"><a className="tprice">{this.state.checkout}</a></h2>
             </div>
             
@@ -133,10 +138,11 @@ export class Items extends React.Component {
     }
 
     async sendData(data) {
+
         const formData = new FormData();
 
         for (var i = 0; i < data.cart.length; i++) {
-            if (data.cart[i].mockup != undefined && data.cart[i].vector != undefined) {
+            if (data.cart[i].mockup == undefined && data.cart[i].vector == undefined) {
                 return;
             }
         }
