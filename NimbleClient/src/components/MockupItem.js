@@ -126,7 +126,7 @@ class VectorFile extends Component {
         var data = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < data.cart.length; i++) {
             if (data.cart[i].id == this.props.id) {
-                this.state = data.cart[i].vector == undefined ? {vector: "Add Vector File"} : {vector: "Vector File Added!"};
+                this.state = data.cart[i].vector == undefined ? {vector: "Add Vector File", url: null, error: null} : {vector: "Vector File Added!", url: null, error: null};
                 return;
             }
         }

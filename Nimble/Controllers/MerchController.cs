@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
-using nimble.Async;
+using nimble.Data.Colors;
+using nimble.Data.Colors.Result.Colors;
+using nimble.Data.CompanyData;
+using nimble.Data.CompanyData.Brand;
+using nimble.Data.CompanyData.Item;
 using nimble.Data.Merch;
 using RestSharp;
 
@@ -16,19 +19,19 @@ namespace nimble.Controllers
     [Route("[controller]")]
     public class MerchController : ControllerBase
     {
-        private static IMongoCollection<Merch> _merch;
+        private static IMongoCollection<CompanyData> _data;
         
         public MerchController(IMongoClient client)
         {
             IMongoDatabase database = client.GetDatabase("nimble");
-            _merch = database.GetCollection<Merch>("merch");
-        }
+            _data = database.GetCollection<CompanyData>("merch");
+        } 
 
         [Route("/api/Merch")]
         [HttpPost]
-        public bool Post([FromForm] IFormCollection data)
+        public ActionResult<IEnumerable<Checkout>> Post([FromForm] IFormCollection data)
         {
-            Checkout[] checkouts = new Checkout[] { };
+            List<Checkout> checkouts = new List<Checkout>();
             
             var cart = JsonConvert.DeserializeObject<Cart[]>(data["data"]);
 
@@ -49,11 +52,31 @@ namespace nimble.Controllers
                 request.AddHeader("Authorization", String.Format("Basic {0}", basicAuthValue));
 
                 var response = client.Execute(request);
-                Console.WriteLine(response.Content);
-                Console.ReadLine();
-                
+                Parent result = JsonConvert.DeserializeObject<Parent>(response.Content);
+
+                Colors colors = result.Result.Colors;
+                int backgroundColors = colors.BackgroundColors.Count;
+                int foregroundColors = colors.ForegroundColors.Count;
+                int imageColors = colors.ImageColors.Count;
+
+                int maximum = Math.Max(Math.Max(backgroundColors, foregroundColors), imageColors);
+
+                CompanyData companyData = _data.Find(company => company.Company == "madmerch").FirstOrDefault();
+                checkout.mockupPrice = maximum + companyData.PrintPrice;
+
+                Brand brand = companyData.Brands.Find(brand => brand.Name == item.brand);
+                Item merch = brand.Items.Find(x => x.Name == item.name);
+
+                if (merch == null)
+                {
+                    return null;
+                }
+
+                checkout.price = item.quantity * merch.Price;
+                checkout.id = item.id;
+                checkouts.Add(checkout);
             }
-            return true;
+            return Ok(checkouts);
         }
     }
 }

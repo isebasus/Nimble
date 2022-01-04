@@ -1,17 +1,120 @@
-{
-    "los-angeles-apparel": {
-        "1801GD T-SHIRT": 16,
-        "1809GD T-SHIRT": 16,
-        "HF-09 HOODIE":  27,
-        "HF-10 HOODIE": 27
-    }, "gildan-apparel": {
-        "GILDAN T-SHIRT": 16,
-        "HOODIE": 16
-    }, "comfort-colors-apparel": {
-        "COMFORT COLORS T-SHIRT": 16
-    }, "alstyle-apparel": {
-        "AlSTYLE T-SHIRT": 16
-    }, "colors": {
-        "COLORPRICE": 1
+[
+    {
+        "company": "madmerch",
+        "description": "",
+        "logo": "",
+        "brands": [
+            {
+                "name": "Los Angeles Apparel",
+                "caption": "The best merch made in the USA.",
+                "image": "",
+                "display": true,
+                "merch": [
+                    {
+                        "name": "1801GD T-SHIRT",
+                        "type": "SHIRT",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/1801GD-T-SHIRT`",
+                        "price": 16,
+                        "display": true
+                    },
+                    {
+                        "name": "1809GD T-SHIRT",
+                        "type": "SHIRT",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/1801GD-T-SHIRT`",
+                        "price": 16,
+                        "display": true
+                    },
+                    {
+                        "name": "HF-09 HOODIE",
+                        "type": "HOODIE",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/HF-09-HOODIE`",
+                        "price": 16,
+                        "display": true
+                    },
+                    {
+                        "name": "HF-10 HOODIE",
+                        "type": "HOODIE",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/1801GD-T-SHIRT`",
+                        "price": 16,
+                        "display": true
+                    }
+                ]
+            },
+            {
+                "name": "Gildan",
+                "caption": "Best Priced merch on the market",
+                "image": "",
+                "display": true,
+                "merch": [
+                    {
+                        "name": "GILDAN T-SHIRT",
+                        "type": "SHIRT",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/GILDAN T-SHIRT`",
+                        "price": 16,
+                        "display": true
+                    },
+                    {
+                        "name": "HOODIE",
+                        "type": "SHIRT",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/HOODIE`",
+                        "price": 16,
+                        "display": true
+                    }
+                ]
+            }, {
+                "name": "Comfort Colors",
+                "caption": "Best comfort for cheap.",
+                "image": "",
+                "display": true,
+                "merch": [
+                    {
+                        "name": "COMFORT COLORS T-SHIRT",
+                        "type": "SHIRT",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/COMFORT COLORS T-SHIRT`",
+                        "price": 16,
+                        "display": true
+                    }
+                ]
+            }, {
+                "name": "Alstyle",
+                "caption": "Best comfort for cheap.",
+                "image": "",
+                "display": true,
+                "merch": [
+                    {
+                        "name": "ALSTYLE T-SHIRT",
+                        "type": "SHIRT",
+                        "image": "",
+                        "colors": ["#914637", "#e30e11", "#2e9e50", "#eb6134", "#eb9ba8", "#7da88a", "#1704bf", "#88a2cf", "#030303", "#d9d9d9", "#f7f7f7"],
+                        "sizes": ["XS", "S", "M", "L", "XL", "XXL"],
+                        "url": "`${this.props.match.path}/ALSTYLE T-SHIRT`",
+                        "price": 16,
+                        "display": true
+                    }
+                ]
+            }
+        ],
+        "print-price": 1
     }
-}
+]

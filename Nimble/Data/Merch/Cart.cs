@@ -6,6 +6,8 @@ namespace nimble.Data.Merch
     {
         public string id { get; set; }
         
+        public string brand { get; set; }
+        
         public string name { get; set; }
         
         public string caption { get; set; }
