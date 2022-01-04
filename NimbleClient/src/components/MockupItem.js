@@ -4,6 +4,7 @@ import { projectFirestore, projectStorage } from "../firebase/config";
 export default class MockupItem extends Component {
     constructor(props) {
         super(props);
+        this.state = {notes: ""};
     }
 
     removeItem() {
@@ -37,7 +38,7 @@ export default class MockupItem extends Component {
                     </div>
                     
                 </div>
-                <input className="inputBox" type="text" placeholder="Notes: " style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.setState({quantity: parseInt(event.target.value)})}/>
+                <input className="inputBox" type="text" placeholder="Notes: " style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.props.setNotes(this.props.id, event.target.value)}/>
                 <MockupFile id={this.props.id}/>
                 <VectorFile id={this.props.id}/>
                 <div className="links" style={{marginTop: "50px", position: "absolute", right: "20px", bottom: "-20px"}}>
