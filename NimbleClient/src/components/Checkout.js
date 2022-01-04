@@ -47,8 +47,7 @@ export default class Checkout extends Component {
                       <a class="navItems">Builder</a>
                       <a class="navItems">Order</a>
                 </nav>
-                <h1 className="first">Add Some Mockups<a id="text"></a></h1>
-                {display}
+                <h1 className="first">Checkout<a id="text"></a></h1>
               </div>
         </div>
         )

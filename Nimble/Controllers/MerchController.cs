@@ -62,7 +62,9 @@ namespace nimble.Controllers
                 int maximum = Math.Max(Math.Max(backgroundColors, foregroundColors), imageColors);
 
                 CompanyData companyData = _data.Find(company => company.Company == "madmerch").FirstOrDefault();
-                checkout.mockupPrice = maximum + companyData.PrintPrice;
+
+                checkout.MockupPrice = (maximum * companyData.ColorPrice) + companyData.PrintPrice - 2;
+                checkout.TotalMockupPrice = item.quantity * checkout.MockupPrice;
 
                 Brand brand = companyData.Brands.Find(brand => brand.Name == item.brand);
                 Item merch = brand.Items.Find(x => x.Name == item.name);
@@ -71,9 +73,12 @@ namespace nimble.Controllers
                 {
                     return null;
                 }
+                
+                checkout.Id = item.id;
+                checkout.TShirtPrice = merch.Price;
+                checkout.TotalTShirtPrice = item.quantity * merch.Price;
 
-                checkout.price = item.quantity * merch.Price;
-                checkout.id = item.id;
+                checkout.TotalPrice = checkout.TotalTShirtPrice + checkout.TotalMockupPrice;
                 checkouts.Add(checkout);
             }
             return Ok(checkouts);

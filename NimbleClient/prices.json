@@ -115,6 +115,7 @@
                 ]
             }
         ],
-        "print-price": 1
+        "print-price": 14,
+        "print-color-price": 1
     }
 ]

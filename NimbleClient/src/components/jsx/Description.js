@@ -113,13 +113,14 @@ export default class Description extends Component {
         }
         var data = {
             "id": this.generateUUID(),
+            "brand": this.props.brand,
             "name": this.props.name,
             "caption": this.props.caption,
             "color": this.state.color,
             "size": this.state.size,
             "quantity": this.state.quantity,
             "image": this.props.image,
-            "price": this.props.price
+            "price": this.props.price,
         }
         this.setWindowState(data);
         this.setState({added: "Added!"});

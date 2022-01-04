@@ -15,7 +15,7 @@ namespace nimble.Data.CompanyData
         [BsonElement("description")]
         public string Description { get; set; }
         
-        [BsonElement("log")]
+        [BsonElement("logo")]
         public string Logo { get; set; }
         
         [BsonElement("brands")]
@@ -23,6 +23,9 @@ namespace nimble.Data.CompanyData
         
         [BsonElement("print-price")]
         public int PrintPrice { get; set; }
+        
+        [BsonElement("print-color-price")]
+        public int ColorPrice { get; set; }
 
     }
 }

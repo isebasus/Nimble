@@ -65,6 +65,7 @@ export class Items extends React.Component {
         data.checkout = "";
         data.loading = "none";
         data.check = "Checkout";
+
         this.state = data || {
             cart: []
         }
@@ -88,6 +89,10 @@ export class Items extends React.Component {
         clearInterval(this.interval);
     }
 
+    pushCheckout() {
+        this.props.history.push('/checkout');
+    }
+
     checkout() {
         var count = 0;
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
@@ -108,14 +113,11 @@ export class Items extends React.Component {
         }
 
         this.setState({loading: "block", check: ""});
-
-        if (count >= 1) {
+        if (count == parsedData.cart.length) {
             this.sendData(parsedData);
-            //this.props.history.push('/checkout');
             return;
         }
-
-        this.setState({checkout: "Please add atleast one mockup and vector file."});
+        this.setState({checkout: "Please add " + parsedData.cart.length - count + " more mockup and vector files."});
     }
 
     render(){
@@ -153,9 +155,8 @@ export class Items extends React.Component {
             method: 'POST',
             body: formData
         })
-
-        const status = await response.json();
-        console.log(status);
-        
+        const res = await response.json();
+        window.localStorage.setItem('checkout', JSON.stringify(res));
+        this.setState({loading: "none"}, this.pushCheckout);
     }
   }
