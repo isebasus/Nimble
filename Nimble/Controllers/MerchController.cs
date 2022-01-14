@@ -63,7 +63,7 @@ namespace nimble.Controllers
 
                 CompanyData companyData = _data.Find(company => company.Company == "madmerch").FirstOrDefault();
 
-                checkout.MockupPrice = (maximum * companyData.ColorPrice) + companyData.PrintPrice - 2;
+                checkout.MockupPrice = (maximum * companyData.ColorPrice) + companyData.PrintPrice - backgroundColors;
                 checkout.TotalMockupPrice = item.quantity * checkout.MockupPrice;
 
                 Brand brand = companyData.Brands.Find(brand => brand.Name == item.brand);

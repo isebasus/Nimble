@@ -22,6 +22,12 @@ export default class MockupItem extends Component {
     
     render() {
         var price = this.props.units * this.props.price;
+        var notes = "";
+        if (this.props.notes != null) {
+            notes = "Notes: " + this.props.notes;
+        } else {
+            notes = "Notes: ";
+        }
         return (
             <div className="item" style={{cursor: "default", height: '200px', position: "relative", width: "100%"}} onClick={this.visitPage.bind(this)}>
                 <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block", height: "100%", position: "relative", width: "100%"}}>
@@ -38,7 +44,7 @@ export default class MockupItem extends Component {
                     </div>
                     
                 </div>
-                <input className="inputBox" type="text" placeholder="Notes: " style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.props.setNotes(this.props.id, event.target.value)}/>
+                <input className="inputBox" type="text" placeholder={notes} style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.props.setNotes(this.props.id, event.target.value)}/>
                 <MockupFile id={this.props.id}/>
                 <VectorFile id={this.props.id}/>
                 <div className="links" style={{marginTop: "50px", position: "absolute", right: "20px", bottom: "-20px"}}>
@@ -67,7 +73,7 @@ class MockupFile extends Component {
         }
     }
 
-    useStorage(file){
+    useStorage(file, base64){
         const storageRef = projectStorage.ref(file.name);
     
         const mainImage = storageRef.child(file.name);
@@ -77,6 +83,7 @@ class MockupFile extends Component {
         mainImage.put(file).then((snapshot) => {
             mainImage.getDownloadURL().then((url) => {
                 this.setState({url: url});
+                this.setState({mockupEncoded: base64});
                 this.setState({mockup: "Mockup Added!"},
                 this.setFileData);
             })
@@ -89,15 +96,29 @@ class MockupFile extends Component {
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
                 parsedData.cart[i]["mockup"] = this.state.url;
+                parsedData.cart[i]["mockupEncoded"] = this.state.mockupEncoded;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));
                 return;
             }
         }
     }
 
+    getBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+      }
+      
+
     onFileChangeCapture(e) {
         /*Selected files data can be collected here.*/
-       this.useStorage(e.target.files[0]);
+       var file = e.target.files[0];
+       this.getBase64(file).then(
+        data => this.useStorage(file, data)
+       );
     };
 
     onBtnClick = () => {

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Header from './Header.js';
 import MockupItem from './MockupItem';
+import ImageItem from './ImageItem.js';
+
 
 export default class Checkout extends Component {
     constructor(props) {
@@ -29,9 +31,16 @@ export default class Checkout extends Component {
     }
 
     render() {
+        var count = 0;
+        for (var i = 0; i < this.state.cart.length; i++) {
+            if (this.state.cart[i].mockup != undefined && this.state.cart[i].vector != undefined) {
+                count++;
+            }
+        }
+
         var display;
-        if (this.state.cart.length == 0) {
-            display = <h2 className="caption" >You have an empty cart.</h2>
+        if (this.state.cart.length == 0 || count != this.state.cart.length) {
+            display = <h2 className="caption" >Please upload mockups to cart to proceed.</h2>
         } else {
             display = <Items></Items>
         }
@@ -47,7 +56,9 @@ export default class Checkout extends Component {
                       <a class="navItems">Builder</a>
                       <a class="navItems">Order</a>
                 </nav>
-                <h1 className="first">Checkout<a id="text"></a></h1>
+                <h1 className="first" style={{marginBottom: "90px"}}>Checkout<a id="text"></a></h1>
+                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", color: "rgba(0, 0, 0, 0.58)"}} id="pCaption"><a className="tprice">CHECKOUT WITH MADMERCH</a></h2>
+                {display}
               </div>
         </div>
         )
@@ -58,8 +69,11 @@ export class Items extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = JSON.parse(window.localStorage.getItem('state')) || {
-            cart: []
+        var data = JSON.parse(window.localStorage.getItem('newCart'));
+        data.loaded = false;
+        data.price = 0;
+        this.state = data || {
+            combinedData: []
         }
         this.checkout = "Checkout";
     }
@@ -82,36 +96,22 @@ export class Items extends React.Component {
         clearInterval(this.interval);
     }
 
-    checkout() {
-        var count = 0;
-        var parsedData = JSON.parse(window.localStorage.getItem('state'));
-        for (var i = 0; i < parsedData.cart.length; i++) {
-            if (parsedData.cart[i].mockup != undefined && parsedData.cart[i].vector != undefined) {
-                count++;
-            }
-        }
-
-        if (count >= 1) {
-            this.props.history.push('/checkout');
-        }
-
-        this.checkout = "Please add atleast one mockup and vector file."
-    }
-
-    render(){
+    render() {
+        /*
         var price = 0;
-        this.state.cart.map((item) => {
-            price += (item.price * item.quantity);
+        this.state.newCart.map((item) => {
+            price += (item.price * item.totalQuantity);
         });
+        this.setState({price: price})
+        }
+        */
       return (
         <div>
-            <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%"}}>
-                {this.state.cart.map((item) => 
-                    <MockupItem name={item.name} color={item.color} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
+            <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%", marginTop: "30px"}}>
+                {this.state.combinedData.map((item) => 
+                    <ImageItem name={item.name} color={item.color} units={item.totalQuantity} mockupPrice={item.mockupPrice} totalQuantity={item.totalQuantity} sizes={item.sizes} price={item.price} notes={item.notes} image={item.mockup} id={item.id}></ImageItem>
                 )}
-                <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout}>{this.checkout}</a></h2>
             </div>
-            
         </div>
       )
     }
