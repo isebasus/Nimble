@@ -8,6 +8,7 @@ export default class MockupItem extends Component {
     }
 
     removeItem() {
+        window.localStorage.removeItem('checkout');
         var data = {
             cart: []
         }
@@ -66,14 +67,30 @@ class MockupFile extends Component {
         var data = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < data.cart.length; i++) {
             if (data.cart[i].id == this.props.id) {
-                this.state = data.cart[i].mockup == undefined ? {mockup: "Add Mockup", url: null, error: null} 
+                this.state = data.cart[i].mockupUploaded == false ? {mockup: "Add Mockup", url: null, error: null} 
                     : {mockup: "Mockup Added!", url: null, error: null};
                 return;
             }
         }
     }
 
-    useStorage(file, base64){
+    generateUUID() { // Public Domain/MIT
+        var d = new Date().getTime();//Timestamp
+        var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16;//random number between 0 and 16
+            if(d > 0){//Use timestamp until depleted
+                r = (d + r)%16 | 0;
+                d = Math.floor(d/16);
+            } else {//Use microseconds since page-load if supported
+                r = (d2 + r)%16 | 0;
+                d2 = Math.floor(d2/16);
+            }
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
+    useStorage(file){
         const storageRef = projectStorage.ref(file.name);
     
         const mainImage = storageRef.child(file.name);
@@ -83,24 +100,42 @@ class MockupFile extends Component {
         mainImage.put(file).then((snapshot) => {
             mainImage.getDownloadURL().then((url) => {
                 this.setState({url: url});
-                this.setState({mockupEncoded: base64});
                 this.setState({mockup: "Mockup Added!"},
                 this.setFileData);
             })
         });
     }
 
-    setFileData() {
-        console.log(this.state.url);
+    async setFileData() {
+
+        if (window.localStorage.getItem('userId') == null) {
+            var data = {
+                "userId": this.generateUUID()
+            }
+            window.localStorage.setItem('userId', JSON.stringify(data));
+        }
+
+        const formData = new FormData();
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
+        var queuedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
                 parsedData.cart[i]["mockup"] = this.state.url;
-                parsedData.cart[i]["mockupEncoded"] = this.state.mockupEncoded;
-                window.localStorage.setItem('state', JSON.stringify(parsedData));
-                return;
+                parsedData.cart[i]["userId"] = JSON.parse(window.localStorage.getItem('userId')).userId;
+                formData.append('data', JSON.stringify(parsedData.cart[i]))
+
+                queuedData.cart[i]["mockupUploaded"] = true;
+                window.localStorage.setItem('state', JSON.stringify(queuedData));
+                break;
             }
         }
+
+        const response = await fetch('/api/addUserItemCart', {
+            method: 'POST',
+            body: formData
+        })
+        const res = await response.json();
+        console.log(res);
     }
 
     getBase64(file) {
@@ -114,11 +149,7 @@ class MockupFile extends Component {
       
 
     onFileChangeCapture(e) {
-        /*Selected files data can be collected here.*/
-       var file = e.target.files[0];
-       this.getBase64(file).then(
-        data => this.useStorage(file, data)
-       );
+        this.useStorage(e.target.files[0]);
     };
 
     onBtnClick = () => {
@@ -148,7 +179,7 @@ class VectorFile extends Component {
         var data = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < data.cart.length; i++) {
             if (data.cart[i].id == this.props.id) {
-                this.state = data.cart[i].vector == undefined ? {vector: "Add Vector File", url: null, error: null} : {vector: "Vector File Added!", url: null, error: null};
+                this.state = data.cart[i].vectorUploaded == false ? {vector: "Add Vector File", url: null, error: null} : {vector: "Vector File Added!", url: null, error: null};
                 return;
             }
         }
@@ -175,11 +206,32 @@ class VectorFile extends Component {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
-                parsedData.cart[i]["vector"] = this.state.url;
+                if (parsedData.cart[i].mockupUploaded == false) {
+                    parsedData.cart[i]["vector"] = this.state.url;
+                    parsedData.cart[i]["vectorUploaded"] = true;
+                    window.localStorage.setItem('state', JSON.stringify(parsedData));
+                    return;
+                } 
+                parsedData.cart[i]["vectorUploaded"] = true;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));
+                this.setVectorData(this.state.url, parsedData.cart[i].userId);
                 return;
             }
         }
+    }
+
+    async setVectorData(vector, userId) {
+        var data = [vector, userId];
+        const formData = new FormData();
+        
+        formData.append('data', JSON.stringify(data));
+
+        const response = await fetch('/api/addVectorFile', {
+            method: 'POST',
+            body: formData
+        })
+        const res = await response.json();
+        console.log(res);
     }
 
     onFileChangeCapture(e) {

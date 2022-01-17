@@ -10,6 +10,7 @@ export default class CartItem extends Component {
     }
 
     removeItem() {
+        window.localStorage.removeItem('checkout');
         var data = {
             cart: []
         }

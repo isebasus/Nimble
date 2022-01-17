@@ -24,6 +24,8 @@ export default class Description extends Component {
 
     setWindowState(state) {
         var w = window.localStorage.getItem('state');
+        window.localStorage.removeItem('newCart');
+        window.localStorage.removeItem('checkout');
         if (w != null) {
             var parsedData = JSON.parse(w);
             parsedData.cart.push(state);
@@ -121,6 +123,8 @@ export default class Description extends Component {
             "quantity": this.state.quantity,
             "image": this.props.image,
             "price": this.props.price,
+            "mockupUploaded": false,
+            "vectorUploaded": false
         }
         this.setWindowState(data);
         this.setState({added: "Added!"});
