@@ -214,7 +214,7 @@ class VectorFile extends Component {
                 } 
                 parsedData.cart[i]["vectorUploaded"] = true;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));
-                this.setVectorData(this.state.url, parsedData.cart[i].userId);
+                this.setVectorData(this.state.url, JSON.parse(window.localStorage.getItem('userId')).userId, parsedData.cart[i].id);
                 return;
             }
         }

@@ -37,13 +37,56 @@ namespace nimble.Controllers
             _data = database.GetCollection<User>("carts");
             _merch = database.GetCollection<CompanyData>("merch");
         }
+        
+        [Route("/api/removeItem")]
+        [HttpPost]
+        public bool RemoveItem([FromForm] IFormCollection data)
+        {
+            
+            var clientItem = JsonConvert.DeserializeObject<string[]>(data["data"]);
+            string userId = clientItem[0];
+            string cartId = clientItem[1];
+
+            User user = _data.Find(user => user.UserId == userId).FirstOrDefault();
+            List<string> itemData = user.ItemIds[cartId];
+            string merchId = itemData[0];
+            string size = itemData[1];
+            string quantity = itemData[2];
+            
+            Item item = user.Items.Find(i => i.MerchId == merchId);
+            if (item == null)
+            {
+                return false;
+            }
+            item.Sizes[size] -= Convert.ToInt32(quantity);
+            if (item.Sizes[size] == 0) item.Sizes.Remove(size);
+            if (item.Sizes.Count == 0) user.Items.Remove(item);
+            
+            _data.ReplaceOne(x => x.UserId == userId, user);
+            return true;
+        }
 
         [Route("/api/addVectorFile")]
         [HttpPost]
         public bool PostVector([FromForm] IFormCollection data)
         {
             var vector = JsonConvert.DeserializeObject<string[]>(data["data"]);
-            Console.WriteLine(vector[0]);
+            string vectorUrl = vector[0];
+            string userId = vector[1];
+            string cartId = vector[2];
+
+            User user = _data.Find(user => user.UserId == userId).FirstOrDefault();
+            List<string> itemData = user.ItemIds[cartId];
+            string merchId = itemData[0]; // item data stores merch uuid to find item
+            
+            Item item = user.Items.Find(i => i.MerchId == merchId);
+            if (item == null)
+            {
+                return false;
+            }
+            item.Vector = vectorUrl;
+            
+            _data.ReplaceOne(x => x.UserId == userId, user);
             return true;
         }
 
@@ -51,12 +94,15 @@ namespace nimble.Controllers
         [HttpPost]
         public bool Post([FromForm] IFormCollection data)
         {
+            // Deserialize item from client cart
             var item = JsonConvert.DeserializeObject<Cart>(data["data"]);
             Checkout checkout = new Checkout();
             
+            // Check if a user exists
             User user = _data.Find(user => user.UserId == item.userId).FirstOrDefault();
             if (user == null)
             {
+                // Create new User 
                 user = new User();
                 user.UserId = item.userId;
 
@@ -85,8 +131,8 @@ namespace nimble.Controllers
             }
             else
             {
+                // Check if item from client already exists
                 var items = user.Items;
-
                 if (user.ItemIds.ContainsKey(item.id))
                 {
                     var itemData = user.ItemIds[item.id];
@@ -94,57 +140,26 @@ namespace nimble.Controllers
 
                     string currentUrl = getBase64Image(item.mockup);
                     string saveUrl = getBase64Image(cItem.Mockup);
-
+                    
+                    // Do nothing if client uploads the same mockup on the same item
                     if (currentUrl == saveUrl)
                     {
                         return true;
                     }
+                    populateData(items, item, user, checkout);
 
-                    if (!populateData(items, item, user, checkout))
-                    {
-                        return false;
-                    }
-                    cItem.Sizes.Remove(item.size);
-
-                    if (cItem.Sizes.Count == 0)
-                    {
-                        user.Items.Remove(cItem);
-                    }
+                    cItem.Sizes[item.size] -= item.quantity;
+                    if (cItem.Sizes[item.size] == 0) cItem.Sizes.Remove(item.size);
+                    if (cItem.Sizes.Count == 0) user.Items.Remove(cItem);
+                    
                     _data.ReplaceOne(x => x.UserId == item.userId, user);
                     return true;
                 }
-                if (!populateData(items, item, user, checkout))
-                {
-                    return false;
-                }
+
+                populateData(items, item, user, checkout);
                 _data.ReplaceOne(x => x.UserId == item.userId, user);
             }
             return true;
-        }
-
-        private string getBase64Image(string url)
-        {
-            using (var client = new WebClient())
-            {
-                byte[] dataBytes = client.DownloadData(new Uri(url));
-                return Convert.ToBase64String(dataBytes);
-            }
-        }
-
-        private Item createItem(Cart cart)
-        {
-            Guid uuid = Guid.NewGuid();
-            Item item = new Item();
-            item.MerchId = uuid.ToString();
-            item.Brand = cart.brand;
-            item.Name = cart.name;
-            item.Color = cart.color;
-            item.Mockup = cart.mockup;
-            item.Vector = cart.vector;
-            item.TotalQuantity = cart.quantity;
-            item.Sizes = new Dictionary<string, int>();
-            item.Sizes.Add(cart.size, cart.quantity);
-            return item;
         }
 
         private bool populateData(List<Item> items, Cart item, User user, Checkout checkout)
@@ -155,8 +170,8 @@ namespace nimble.Controllers
                 string saveUrl = getBase64Image(i.Mockup);
                 return i.Name == item.name && i.Color == item.color && currentUrl == saveUrl;
             });
-                
-
+            
+            // If item does not currently exist populate new item
             if (cartItem == null)
             {
                 cartItem = createItem(item);
@@ -210,6 +225,31 @@ namespace nimble.Controllers
                 user.ItemIds[item.id][0] = cartItem.MerchId;
             }
             return true;
+        }
+        
+        private string getBase64Image(string url)
+        {
+            using (var client = new WebClient())
+            {
+                byte[] dataBytes = client.DownloadData(new Uri(url));
+                return Convert.ToBase64String(dataBytes);
+            }
+        }
+
+        private Item createItem(Cart cart)
+        {
+            Guid uuid = Guid.NewGuid();
+            Item item = new Item();
+            item.MerchId = uuid.ToString();
+            item.Brand = cart.brand;
+            item.Name = cart.name;
+            item.Color = cart.color;
+            item.Mockup = cart.mockup;
+            item.Vector = cart.vector;
+            item.TotalQuantity = cart.quantity;
+            item.Sizes = new Dictionary<string, int>();
+            item.Sizes.Add(cart.size, cart.quantity);
+            return item;
         }
 
         private bool setMockupPrice(Cart item, Checkout checkout)
