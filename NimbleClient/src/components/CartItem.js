@@ -10,17 +10,17 @@ export default class CartItem extends Component {
     }
 
     removeItem() {
-        window.localStorage.removeItem('checkout');
-        var data = {
-            cart: []
-        }
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
-            if (!(parsedData.cart[i].id == this.props.id)) {
-                data.cart.push(parsedData.cart[i]);
+            if (parsedData.cart[i].id == this.props.id) {
+                if (parsedData.cart[i].mockupUploaded == true) {
+                    this.removeItemBackend(parsedData.cart[i].id);
+                }
+                parsedData.cart.splice(i, 1);
+                break;
             }
         }
-        window.localStorage.setItem('state', JSON.stringify(data));
+        window.localStorage.setItem('state', JSON.stringify(parsedData));
     }
     
     render() {

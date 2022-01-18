@@ -1,22 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Net.Mime;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Newtonsoft.Json;
 using nimble.Data.Colors;
 using nimble.Data.Colors.Result.Colors;
 using nimble.Data.CompanyData;
 using nimble.Data.CompanyData.Brand;
-using nimble.Data.CompanyData.Item;
-using nimble.Data.Users.Items;
-using System.Drawing.Imaging;
 using System.Net;
-using System.Xml;
 using nimble.Data.Merch;
 using nimble.Data.Users;
 using RestSharp;
@@ -61,6 +53,10 @@ namespace nimble.Controllers
             item.Sizes[size] -= Convert.ToInt32(quantity);
             if (item.Sizes[size] == 0) item.Sizes.Remove(size);
             if (item.Sizes.Count == 0) user.Items.Remove(item);
+            
+            Console.WriteLine(cartId);
+            
+            user.ItemIds.Remove(cartId);
             
             _data.ReplaceOne(x => x.UserId == userId, user);
             return true;
@@ -162,7 +158,7 @@ namespace nimble.Controllers
             return true;
         }
 
-        private bool populateData(List<Item> items, Cart item, User user, Checkout checkout)
+        private void populateData(List<Item> items, Cart item, User user, Checkout checkout)
         {
             Item cartItem = items.Find(i =>
             {
@@ -177,7 +173,7 @@ namespace nimble.Controllers
                 cartItem = createItem(item);
                 if (item.mockup != null)
                 {
-                    if (setMockupPrice(item, checkout) != true) return false;
+                    if (setMockupPrice(item, checkout) != true) return;
                 }
 
                 if (user.ItemIds.ContainsKey(item.id))
@@ -224,7 +220,6 @@ namespace nimble.Controllers
                 
                 user.ItemIds[item.id][0] = cartItem.MerchId;
             }
-            return true;
         }
         
         private string getBase64Image(string url)

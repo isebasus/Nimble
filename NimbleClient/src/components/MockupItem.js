@@ -8,17 +8,30 @@ export default class MockupItem extends Component {
     }
 
     removeItem() {
-        window.localStorage.removeItem('checkout');
-        var data = {
-            cart: []
-        }
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
-            if (!(parsedData.cart[i].id == this.props.id)) {
-                data.cart.push(parsedData.cart[i]);
+            if (parsedData.cart[i].id == this.props.id) {
+                if (parsedData.cart[i].mockupUploaded == true) {
+                    this.removeItemBackend(parsedData.cart[i].id);
+                }
+                parsedData.cart.splice(i, 1);
+                break;
             }
         }
-        window.localStorage.setItem('state', JSON.stringify(data));
+        window.localStorage.setItem('state', JSON.stringify(parsedData));
+    }
+
+    async removeItemBackend(cartId) {
+        var data = [JSON.parse(window.localStorage.getItem('userId')).userId, cartId];
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+
+        const response = await fetch('/api/removeItem', {
+            method: 'POST',
+            body: formData
+        })
+        const res = await response.json();
+        console.log(res);
     }
     
     render() {
@@ -91,8 +104,10 @@ class MockupFile extends Component {
     }
 
     useStorage(file){
+        if (file == null) {
+            return;
+        }
         const storageRef = projectStorage.ref(file.name);
-    
         const mainImage = storageRef.child(file.name);
 
         this.setState({mockup: "Uploading... "});
@@ -100,13 +115,16 @@ class MockupFile extends Component {
         mainImage.put(file).then((snapshot) => {
             mainImage.getDownloadURL().then((url) => {
                 this.setState({url: url});
-                this.setState({mockup: "Mockup Added!"},
-                this.setFileData);
+                this.setFileData(this.setMockupState.bind(this));
             })
         });
     }
 
-    async setFileData() {
+    setMockupState() {
+        this.setState({mockup: "Mockup Added!"});
+    }
+
+    async setFileData(_callback) {
 
         if (window.localStorage.getItem('userId') == null) {
             var data = {
@@ -135,17 +153,9 @@ class MockupFile extends Component {
             body: formData
         })
         const res = await response.json();
+        _callback();
         console.log(res);
     }
-
-    getBase64(file) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = error => reject(error);
-        });
-      }
       
 
     onFileChangeCapture(e) {
@@ -186,8 +196,10 @@ class VectorFile extends Component {
     }
 
     useStorage(file){
+        if (file == null) {
+            return;
+        }
         const storageRef = projectStorage.ref(file.name);
-    
         const mainImage = storageRef.child(file.name);
 
         this.setState({vector: "Uploading... "});
@@ -195,13 +207,16 @@ class VectorFile extends Component {
         mainImage.put(file).then((snapshot) => {
             mainImage.getDownloadURL().then((url) => {
                 this.setState({url: url});
-                this.setState({vector: "Vector File Added!"},
-                this.setFileData);
+                this.setFileData(this.setVectorState.bind(this));
             })
         });
     }
 
-    setFileData() {
+    setVectorState() {
+        this.setState({vector: "Vector File Added!"})
+    }
+
+    setFileData(_callback) {
         console.log(this.state.url);
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
@@ -210,18 +225,21 @@ class VectorFile extends Component {
                     parsedData.cart[i]["vector"] = this.state.url;
                     parsedData.cart[i]["vectorUploaded"] = true;
                     window.localStorage.setItem('state', JSON.stringify(parsedData));
+                    _callback();
                     return;
                 } 
                 parsedData.cart[i]["vectorUploaded"] = true;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));
                 this.setVectorData(this.state.url, JSON.parse(window.localStorage.getItem('userId')).userId, parsedData.cart[i].id);
+                _callback();
                 return;
             }
         }
+        _callback();
     }
 
-    async setVectorData(vector, userId) {
-        var data = [vector, userId];
+    async setVectorData(vector, userId, cartId) {
+        var data = [vector, userId, cartId];
         const formData = new FormData();
         
         formData.append('data', JSON.stringify(data));
