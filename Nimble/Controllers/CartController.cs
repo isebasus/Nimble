@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -29,6 +30,42 @@ namespace nimble.Controllers
             _data = database.GetCollection<User>("carts");
             _merch = database.GetCollection<CompanyData>("merch");
         }
+
+        [Route("/api/uploadNotes")]
+        [HttpPost]
+        public bool UploadNotes([FromForm] IFormCollection data)
+        {
+            var clientData = JsonConvert.DeserializeObject<string[][]>(data["data"]);
+            string userId = JsonConvert.DeserializeObject<string>(data["userId"]);
+            User user = _data.Find(user => user.UserId == userId).FirstOrDefault();
+            if (user == null)
+            {
+                Console.WriteLine("Upload Notes: User is null."); 
+                return false;
+            }
+
+            foreach (string[] entry in clientData)
+            {
+                string itemId = entry[0];
+                string notes = entry[1];
+
+                Item item = user.Items.Find(i => i.MerchId == user.ItemIds[itemId][0]);
+
+                if (item == null) return false;
+                if (item.Notes == null) item.Notes = new Dictionary<string, string>();
+
+                if (!item.Notes.ContainsKey(itemId))
+                {
+                    item.Notes.Add(itemId, notes);
+                }
+                else
+                {
+                    item.Notes[itemId] = notes;
+                }
+            }
+            _data.ReplaceOne(x => x.UserId == userId, user);
+            return true;
+        }
         
         [Route("/api/removeItem")]
         [HttpPost]
@@ -40,21 +77,23 @@ namespace nimble.Controllers
             string cartId = clientItem[1];
 
             User user = _data.Find(user => user.UserId == userId).FirstOrDefault();
+            if (user == null) return false;
+            if (user.ItemIds[cartId] == null) return false;
+            
             List<string> itemData = user.ItemIds[cartId];
             string merchId = itemData[0];
             string size = itemData[1];
             string quantity = itemData[2];
+            string price = itemData[3];
             
             Item item = user.Items.Find(i => i.MerchId == merchId);
-            if (item == null)
-            {
-                return false;
-            }
+            if (item == null) return false;
+            
             item.Sizes[size] -= Convert.ToInt32(quantity);
+            item.TotalQuantity -= Convert.ToInt32(quantity);
+            item.TotalPrice -= Convert.ToInt32(price);
             if (item.Sizes[size] == 0) item.Sizes.Remove(size);
             if (item.Sizes.Count == 0) user.Items.Remove(item);
-            
-            Console.WriteLine(cartId);
             
             user.ItemIds.Remove(cartId);
             
@@ -91,7 +130,17 @@ namespace nimble.Controllers
         public bool Post([FromForm] IFormCollection data)
         {
             // Deserialize item from client cart
-            var item = JsonConvert.DeserializeObject<Cart>(data["data"]);
+            var items = JsonConvert.DeserializeObject<Cart[]>(data["data"]);
+            foreach (Cart item in items)
+            {
+                insertData(item);
+            }
+
+            return true;
+        }
+
+        private bool insertData(Cart item)
+        {
             Checkout checkout = new Checkout();
             
             // Check if a user exists
@@ -117,6 +166,7 @@ namespace nimble.Controllers
                 itemData.Add(cartItem.MerchId);
                 itemData.Add(item.size);
                 itemData.Add(item.quantity.ToString());
+                itemData.Add(checkout.TotalPrice.ToString());
 
                 user.ItemIds.Add(item.id, itemData);
 
@@ -145,13 +195,15 @@ namespace nimble.Controllers
                     populateData(items, item, user, checkout);
 
                     cItem.Sizes[item.size] -= item.quantity;
+                    cItem.TotalQuantity -= item.quantity;
+                    cItem.TotalPrice -= Convert.ToInt32(itemData[3]);
                     if (cItem.Sizes[item.size] == 0) cItem.Sizes.Remove(item.size);
                     if (cItem.Sizes.Count == 0) user.Items.Remove(cItem);
                     
                     _data.ReplaceOne(x => x.UserId == item.userId, user);
                     return true;
                 }
-
+                Console.WriteLine(item.mockup);
                 populateData(items, item, user, checkout);
                 _data.ReplaceOne(x => x.UserId == item.userId, user);
             }
@@ -179,6 +231,7 @@ namespace nimble.Controllers
                 if (user.ItemIds.ContainsKey(item.id))
                 {
                     user.ItemIds[item.id][0] = cartItem.MerchId;
+                    user.ItemIds[item.id][3] = checkout.TotalPrice.ToString();
                 }
                 else
                 {
@@ -186,6 +239,7 @@ namespace nimble.Controllers
                     itemData.Add(cartItem.MerchId);
                     itemData.Add(item.size);
                     itemData.Add(item.quantity.ToString());
+                    itemData.Add(checkout.TotalPrice.ToString());
 
                     user.ItemIds.Add(item.id, itemData);
                 }
@@ -197,6 +251,7 @@ namespace nimble.Controllers
             }
             else
             {
+                if (setMockupPrice(item, checkout) != true) return;
                 if (cartItem.Sizes.ContainsKey(item.size))
                 {
                     cartItem.Sizes[item.size] += item.quantity;
@@ -214,11 +269,13 @@ namespace nimble.Controllers
                     itemData.Add(cartItem.MerchId);
                     itemData.Add(item.size);
                     itemData.Add(item.quantity.ToString());
+                    itemData.Add(checkout.TotalPrice.ToString());
                     
                     user.ItemIds.Add(item.id, itemData);
                 }
                 
                 user.ItemIds[item.id][0] = cartItem.MerchId;
+                user.ItemIds[item.id][3] = checkout.TotalPrice.ToString();
             }
         }
         

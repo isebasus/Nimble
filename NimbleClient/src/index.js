@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
 import { BrowserRouter } from 'react-router-dom';
+import AutoQueue from './processes/ProcessQueue';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const rootElement = document.getElementById('root');
+window.processQueue = new AutoQueue();
 
+const rootElement = document.getElementById('root');
 ReactDOM.render(
   <BrowserRouter basename={"/"}>
     <App />

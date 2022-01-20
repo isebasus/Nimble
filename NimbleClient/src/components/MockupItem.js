@@ -11,9 +11,7 @@ export default class MockupItem extends Component {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
-                if (parsedData.cart[i].mockupUploaded == true) {
-                    this.removeItemBackend(parsedData.cart[i].id);
-                }
+                this.removeItemBackend(parsedData.cart[i].id)
                 parsedData.cart.splice(i, 1);
                 break;
             }
@@ -105,13 +103,13 @@ class MockupFile extends Component {
 
     useStorage(file){
         if (file == null) {
+            console.log("file is null");
             return;
         }
         const storageRef = projectStorage.ref(file.name);
         const mainImage = storageRef.child(file.name);
 
         this.setState({mockup: "Uploading... "});
-
         mainImage.put(file).then((snapshot) => {
             mainImage.getDownloadURL().then((url) => {
                 this.setState({url: url});
@@ -124,37 +122,17 @@ class MockupFile extends Component {
         this.setState({mockup: "Mockup Added!"});
     }
 
-    async setFileData(_callback) {
-
-        if (window.localStorage.getItem('userId') == null) {
-            var data = {
-                "userId": this.generateUUID()
-            }
-            window.localStorage.setItem('userId', JSON.stringify(data));
-        }
-
-        const formData = new FormData();
+    setFileData(_callback) {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
-        var queuedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
                 parsedData.cart[i]["mockup"] = this.state.url;
-                parsedData.cart[i]["userId"] = JSON.parse(window.localStorage.getItem('userId')).userId;
-                formData.append('data', JSON.stringify(parsedData.cart[i]))
-
-                queuedData.cart[i]["mockupUploaded"] = true;
-                window.localStorage.setItem('state', JSON.stringify(queuedData));
+                parsedData.cart[i]["mockupUploaded"] = true;
+                window.localStorage.setItem('state', JSON.stringify(parsedData));
                 break;
             }
         }
-
-        const response = await fetch('/api/addUserItemCart', {
-            method: 'POST',
-            body: formData
-        })
-        const res = await response.json();
         _callback();
-        console.log(res);
     }
       
 
@@ -203,7 +181,6 @@ class VectorFile extends Component {
         const mainImage = storageRef.child(file.name);
 
         this.setState({vector: "Uploading... "});
-
         mainImage.put(file).then((snapshot) => {
             mainImage.getDownloadURL().then((url) => {
                 this.setState({url: url});
@@ -217,20 +194,12 @@ class VectorFile extends Component {
     }
 
     setFileData(_callback) {
-        console.log(this.state.url);
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
-                if (parsedData.cart[i].mockupUploaded == false) {
-                    parsedData.cart[i]["vector"] = this.state.url;
-                    parsedData.cart[i]["vectorUploaded"] = true;
-                    window.localStorage.setItem('state', JSON.stringify(parsedData));
-                    _callback();
-                    return;
-                } 
+                parsedData.cart[i]["vector"] = this.state.url;
                 parsedData.cart[i]["vectorUploaded"] = true;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));
-                this.setVectorData(this.state.url, JSON.parse(window.localStorage.getItem('userId')).userId, parsedData.cart[i].id);
                 _callback();
                 return;
             }
@@ -254,7 +223,7 @@ class VectorFile extends Component {
 
     onFileChangeCapture(e) {
         /*Selected files data can be collected here.*/
-       this.useStorage(e.target.files[0]);
+        this.useStorage(e.target.files[0]);
     };
 
     onBtnClick = () => {

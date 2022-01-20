@@ -128,6 +128,11 @@ export default class Description extends Component {
         }
         this.setWindowState(data);
         this.setState({added: "Added!"});
+
+        var data = {
+            uploaded: false
+        }
+        window.localStorage.setItem('isUploaded', JSON.stringify(data));
     }
 
 }

@@ -92,65 +92,8 @@ export class Items extends React.Component {
     }
 
     pushCheckout() {
-
-        var combinedData = [];
-        var verifiedIds = [];
-        this.state.cart.map((item) => {
-            var id = item.mockupEncoded + item.color + item.name;
-            
-            var index = null;
-            for(var i = 0; i < verifiedIds.length; i++) {
-                if (verifiedIds[i] == id) {
-                    index = i;
-                }
-            }
-
-            if (index == null) {
-                verifiedIds.push(id);
-                var prices = JSON.parse(window.localStorage.getItem('checkout'));
-                
-                var totalPrice = 0;
-                var mockupPrice = 0;
-                for (var i = 0; i < prices.length; i++) {
-                    if (prices[i].id == item.id) {
-                        totalPrice = prices[i].totalPrice;
-                        mockupPrice = prices[i].mockupPrice;
-                    }
-                }
-
-                var dict = {};
-                dict[item.size] = item.quantity;
-                combinedData.push({name: item.name, mockup: item.mockup, vector: item.vector, mockupPrice: mockupPrice, price: totalPrice, totalQuantity: item.quantity, notes: item.notes, id: id, color: item.color, sizes: dict});
-            } else if (combinedData[index].name == item.name && combinedData[index].color == item.color) {
-                var prices = JSON.parse(window.localStorage.getItem('checkout'));
-                
-                var totalPrice = 0;
-                var mockupPrice = 0;
-                for (var i = 0; i < prices.length; i++) {
-                    if (prices[i].id == item.id) {
-                        totalPrice = prices[i].totalPrice;
-                        mockupPrice = prices[i].mockupPrice;
-                    }
-                }
-
-                var dict = combinedData[index].sizes;
-
-                if (dict[item.size] == null) {
-                    dict[item.size] = item.quantity;
-                } else {
-                    dict[item.size] += item.quantity;
-                }
-                var currPrice = combinedData[index].price + (totalPrice);
-                var currQuantity = combinedData[index].totalQuantity + item.quantity;
-                combinedData[index] = {name: item.name, mockup: item.mockup, vector: item.vector, mockupPrice: mockupPrice, totalQuantity: currQuantity, price: currPrice, notes: item.notes, id: id, color: item.color, sizes: dict}
-            }
-        });
-        
-        var data = {
-            combinedData
-        }
-        window.localStorage.setItem('newCart', JSON.stringify(data));
-        this.props.history.push('/checkout');
+        //this.props.history.push('/checkout');
+        return;
     }
 
     setNotes(id, notes) {
@@ -165,7 +108,7 @@ export class Items extends React.Component {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         var modifiedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
-            if (parsedData.cart[i].mockup != undefined && parsedData.cart[i].vector != undefined) {
+            if (parsedData.cart[i].mockupUploaded == true && parsedData.cart[i].vectorUploaded == true) {
                 if (this.state.notes[parsedData.cart[i].id] != null) {
                     modifiedData.cart[i]["notes"] = this.state.notes[parsedData.cart[i].id];
                     window.localStorage.setItem('state', JSON.stringify(modifiedData));
@@ -173,23 +116,17 @@ export class Items extends React.Component {
                 count++;
             }
 
-            if (parsedData.cart[i].mockup == undefined && parsedData.cart[i].vector != undefined) {
+            if (parsedData.cart[i].mockupUploaded == false && parsedData.cart[i].vectorUploaded == true) {
                 this.setState({checkout: "A mockup is missing."});
                 return;
             }
 
-            if (parsedData.cart[i].mockup != undefined && parsedData.cart[i].vector == undefined) {
+            if (parsedData.cart[i].mockupUploaded == true && parsedData.cart[i].vectorUploaded == false) {
                 this.setState({checkout: "A vector file is missing."});
                 return;
             }
         }
-
         this.setState({loading: "block", check: ""});
-
-        if (window.localStorage.getItem('checkout') != null) {
-            window.localStorage.removeItem('checkout');
-        }
-
         if (count == parsedData.cart.length) {
             this.sendData(parsedData);
             return;
@@ -220,23 +157,53 @@ export class Items extends React.Component {
     }
 
     async sendData(data) {
-
         const formData = new FormData();
-
         for (var i = 0; i < data.cart.length; i++) {
-            if (data.cart[i].mockup == undefined && data.cart[i].vector == undefined) {
+            if (data.cart[i].mockupUploaded == false && data.cart[i].vectorUploaded == false) {
                 return;
             }
         }
+        if (window.localStorage.getItem('userId') == null) {
+            var data = {
+                "userId": this.generateUUID()
+            }
+            window.localStorage.setItem('userId', JSON.stringify(data));
+        }
 
-        formData.append('data', JSON.stringify(data.cart));
+        var parsedData = JSON.parse(window.localStorage.getItem('state'));
+        for (var i = 0; i < parsedData.cart.length; i++) {
+            parsedData.cart[i]["userId"] = JSON.parse(window.localStorage.getItem('userId')).userId;
+        }
 
-        const response = await fetch('/api/Merch', {
+        const cartData = new FormData();
+        cartData.append('data', JSON.stringify(parsedData.cart));
+        const response = await fetch('/api/addUserItemCart', {
+            method: 'POST',
+            body: cartData
+        })
+        const res = await response.json();
+        console.log(res);
+
+        /*
+        var serializedData = []
+        for (var cartId in this.state.notes) {
+            var d = [cartId, this.state.notes[cartId]];
+            serializedData.push(d);
+        }
+
+        formData.append('data', JSON.stringify(serializedData));
+        formData.append('userId', JSON.stringify(JSON.parse(window.localStorage.getItem('userId')).userId));
+        const response = await fetch('/api/uploadNotes', {
             method: 'POST',
             body: formData
         })
         const res = await response.json();
-        window.localStorage.setItem('checkout', JSON.stringify(res));
-        this.setState({loading: "none"}, this.pushCheckout);
+        console.log(res);
+        */
+        var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
+        isUploaded.uploaded = true;
+        window.localStorage.setItem('isUploaded', JSON.stringify(isUploaded));
+        //this.setState({loading: "none"}, this.pushCheckout);
     }
-  }
+}
+

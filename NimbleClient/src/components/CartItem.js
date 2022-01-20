@@ -13,14 +13,25 @@ export default class CartItem extends Component {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
-                if (parsedData.cart[i].mockupUploaded == true) {
-                    this.removeItemBackend(parsedData.cart[i].id);
-                }
+                this.removeItemBackend(parsedData.cart[i].id)
                 parsedData.cart.splice(i, 1);
                 break;
             }
         }
         window.localStorage.setItem('state', JSON.stringify(parsedData));
+    }
+
+    async removeItemBackend(cartId) {
+        var data = [JSON.parse(window.localStorage.getItem('userId')).userId, cartId];
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+
+        const response = await fetch('/api/removeItem', {
+            method: 'POST',
+            body: formData
+        })
+        const res = await response.json();
+        console.log(res);
     }
     
     render() {

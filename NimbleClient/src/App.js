@@ -35,10 +35,6 @@ function App() {
 }
 
 class Home extends React.Component {
-  qwerty = () => {
-    this.props.history.push('/designer')
-  }
-
   ChooseMerch = () => {
     this.props.history.push('/choose-merch')
   }

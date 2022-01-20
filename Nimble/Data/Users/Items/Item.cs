@@ -37,6 +37,7 @@ namespace nimble.Data.Users.Items
         public int TotalPrice { get; set; }
 
         [BsonElement("notes")]
+        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public Dictionary<string, string> Notes { get; set; }
         
         [BsonElement("sizes")]
