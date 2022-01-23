@@ -57,8 +57,8 @@ export default class MockupItem extends Component {
                     
                 </div>
                 <input className="inputBox" type="text" placeholder={notes} style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.props.setNotes(this.props.id, event.target.value)}/>
-                <MockupFile id={this.props.id}/>
-                <VectorFile id={this.props.id}/>
+                <MockupFile id={this.props.id} setMessage={this.props.setMessage}/>
+                <VectorFile id={this.props.id} setMessage={this.props.setMessage}/>
                 <div className="links" style={{marginTop: "50px", position: "absolute", right: "20px", bottom: "-20px"}}>
                     <a className="li" style={{fontSize: "1rem", float: "right", marginRight: "5px"}} onClick={this.removeItem.bind(this)}>✖ remove</a>
                 </div>
@@ -106,8 +106,9 @@ class MockupFile extends Component {
             console.log("file is null");
             return;
         }
-        const storageRef = projectStorage.ref(file.name);
-        const mainImage = storageRef.child(file.name);
+        var uuid = this.generateUUID();
+        const storageRef = projectStorage.ref(uuid);
+        const mainImage = storageRef.child(uuid);
 
         this.setState({mockup: "Uploading... "});
         mainImage.put(file).then((snapshot) => {
@@ -119,6 +120,9 @@ class MockupFile extends Component {
     }
 
     setMockupState() {
+        var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
+        isUploaded.uploaded = false;
+        window.localStorage.setItem('isUploaded', JSON.stringify(isUploaded));
         this.setState({mockup: "Mockup Added!"});
     }
 
@@ -126,6 +130,9 @@ class MockupFile extends Component {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
+                if (parsedData.cart[i]["mockupUploaded"] == true) {
+                    this.props.setMessage("Press checkout to update your Mockup File(s)");
+                }
                 parsedData.cart[i]["mockup"] = this.state.url;
                 parsedData.cart[i]["mockupUploaded"] = true;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));
@@ -150,6 +157,7 @@ class MockupFile extends Component {
             <form>
                 <input
                 type="file"
+                accept=".png,.jpg,.jpeg"
                 ref={this.inputReference}
                 onChangeCapture={this.onFileChangeCapture.bind(this)}
                 style={{display: 'none'}}
@@ -177,8 +185,9 @@ class VectorFile extends Component {
         if (file == null) {
             return;
         }
-        const storageRef = projectStorage.ref(file.name);
-        const mainImage = storageRef.child(file.name);
+        var uuid = this.generateUUID();
+        const storageRef = projectStorage.ref(uuid);
+        const mainImage = storageRef.child(uuid);
 
         this.setState({vector: "Uploading... "});
         mainImage.put(file).then((snapshot) => {
@@ -189,7 +198,26 @@ class VectorFile extends Component {
         });
     }
 
+    generateUUID() { // Public Domain/MIT
+        var d = new Date().getTime();//Timestamp
+        var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16;//random number between 0 and 16
+            if(d > 0){//Use timestamp until depleted
+                r = (d + r)%16 | 0;
+                d = Math.floor(d/16);
+            } else {//Use microseconds since page-load if supported
+                r = (d2 + r)%16 | 0;
+                d2 = Math.floor(d2/16);
+            }
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
     setVectorState() {
+        var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
+        isUploaded.uploaded = false;
+        window.localStorage.setItem('isUploaded', JSON.stringify(isUploaded));
         this.setState({vector: "Vector File Added!"})
     }
 
@@ -197,6 +225,9 @@ class VectorFile extends Component {
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
         for (var i = 0; i < parsedData.cart.length; i++) {
             if (parsedData.cart[i].id == this.props.id) {
+                if (parsedData.cart[i]["vectorUploaded"] == true) {
+                    this.props.setMessage("Press checkout to update your Vector File(s)");
+                }
                 parsedData.cart[i]["vector"] = this.state.url;
                 parsedData.cart[i]["vectorUploaded"] = true;
                 window.localStorage.setItem('state', JSON.stringify(parsedData));

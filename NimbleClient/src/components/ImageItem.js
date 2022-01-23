@@ -8,16 +8,21 @@ export default class ImageItem extends Component {
     }
 
     removeItem() {
-        var data = {
-            cart: []
-        }
-        var parsedData = JSON.parse(window.localStorage.getItem('state'));
-        for (var i = 0; i < parsedData.cart.length; i++) {
-            if (!(parsedData.cart[i].id == this.props.id)) {
-                data.cart.push(parsedData.cart[i]);
-            }
-        }
-        window.localStorage.setItem('state', JSON.stringify(data));
+        this.removeItemBackend(this.props.id);
+    }
+
+    async removeItemBackend(cartId) {
+        var data = [JSON.parse(window.localStorage.getItem('userId')).userId, cartId];
+        const formData = new FormData();
+        formData.append('data', JSON.stringify(data));
+
+        const response = await fetch('/api/removeParsedItem', {
+            method: 'POST',
+            body: formData
+        })
+        const res = await response.json();
+        window.localStorage.reload(false);
+        console.log(res);
     }
     
     render() {
@@ -46,9 +51,9 @@ export default class ImageItem extends Component {
         }
 
         return (
-            <div className="item" style={{cursor: "default", display: "block", height: "fit-content", position: "relative", width: "100%", paddingBottom: "0px"}} onClick={this.visitPage.bind(this)}>
+            <div className="item" style={{cursor: "default", display: "block", position: "relative", width: "100%", paddingBottom: "0px"}} onClick={this.visitPage.bind(this)}>
                 <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block", height: "100%", position: "relative", width: "100%"}}>
-                    <div className="box" style={{width: "20%", height: "100px", objectFit: "cover", borderRadius: "10px", display: "inline", textAlign: "left", marginBottom: "0px", left: "0px", marginRight: "10px", float: "left", backgroundImage: `url(${this.props.image})`}}></div>
+                    <div className="box" style={{width: "20%", height: "100px", objectFit: "cover", borderRadius: "5px", display: "inline", textAlign: "left", marginBottom: "0px", left: "0px", marginRight: "10px", float: "left", backgroundImage: `url(${this.props.image})`}}></div>
                     <div style={{position: "relative", display: "inline", float: 'left', width: "300px", height: "100%"}}>
                         <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block"}}>
                             <h2 className="caption" style={{fontSize: "1rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", display: "inline", float: "left", marginRight: "10px", fontWeight: "700"}} id="pCaption">{this.props.name}</h2>
@@ -61,7 +66,7 @@ export default class ImageItem extends Component {
                     </div>
                     
                 </div>
-                <h2 className="caption" style={{fontSize:"1rem", color: "rgba(0, 0, 0, 0.80)", width: "40%", textAlign: "left", textIndent: "0.7em", marginTop: "110px", marginBottom: "30px"}} id="pCaption"><a className="tprice">Notes: </a>{notes}</h2>
+                <h2 className="caption" style={{fontSize:"1rem", color: "rgba(0, 0, 0, 0.80)", width: "40%", textAlign: "left", textIndent: "0.7em", marginTop: "110px", paddingBottom: "20px", marginBottom: "20px"}} id="pCaption"><a className="tprice">Notes: </a>{notes}</h2>
                 <div className="links" style={{marginTop: "50px", position: "absolute", right: "20px", bottom: "-20px"}}>
                     <a className="li" style={{fontSize: "1rem", float: "right", marginRight: "5px"}} onClick={this.removeItem.bind(this)}>✖ remove</a>
                 </div>

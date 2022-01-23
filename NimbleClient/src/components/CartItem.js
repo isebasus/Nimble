@@ -19,6 +19,7 @@ export default class CartItem extends Component {
             }
         }
         window.localStorage.setItem('state', JSON.stringify(parsedData));
+        window.location.reload(false);
     }
 
     async removeItemBackend(cartId) {

@@ -2,44 +2,25 @@ import React, { Component } from 'react';
 import Header from './Header.js';
 import MockupItem from './MockupItem';
 import ImageItem from './ImageItem.js';
+import Loader from "react-loader-spinner";
 
 
 export default class Checkout extends Component {
     constructor(props) {
         super(props);
-        this.state = JSON.parse(window.localStorage.getItem('state')) || {
-            cart: []
-        }
+        this.getCartData();
     }
 
-    componentDidMount() {
-        this.interval = setInterval(() => {
-            if (window.localStorage.getItem('state') == null) {
-                return;
-            }
-
-            if (JSON.parse(window.localStorage.getItem('state')).cart.length > 0) {
-                this.setState(JSON.parse(window.localStorage.getItem('state')));
-            } else {
-                this.setState({cart: []});
-            }
-        }, 500)
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
+    getCartData() {
+        
+        return;
     }
 
     render() {
-        var count = 0;
-        for (var i = 0; i < this.state.cart.length; i++) {
-            if (this.state.cart[i].mockup != undefined && this.state.cart[i].vector != undefined) {
-                count++;
-            }
-        }
 
         var display;
-        if (this.state.cart.length == 0 || count != this.state.cart.length) {
+        var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
+        if (isUploaded.uploaded == false) {
             display = <h2 className="caption" >Please upload mockups to cart to proceed.</h2>
         } else {
             display = <Items></Items>
@@ -69,13 +50,8 @@ export class Items extends React.Component {
 
     constructor(props) {
         super(props);
-        var data = JSON.parse(window.localStorage.getItem('newCart'));
-        data.loaded = false;
-        data.price = 0;
-        this.state = data || {
-            combinedData: []
-        }
         this.checkout = "Checkout";
+        this.state = {items: [], loading: true, loaded: false};
     }
 
     componentDidMount() {
@@ -96,23 +72,49 @@ export class Items extends React.Component {
         clearInterval(this.interval);
     }
 
+    static renderItems(items) {
+        return (
+            <div>
+                {items.map(item =>
+                    <ImageItem name={item.Name} color={item.Color} units={item.TotalQuantity} mockupPrice={item.MockupPrice} totalQuantity={item.TotalQuantity} sizes={item.Sizes} price={item.TotalPrice} notes={item.Notes} image={item.Mockup} id={item.MerchId}></ImageItem>
+                )}
+            </div>
+        );
+    }
+
     render() {
-        /*
-        var price = 0;
-        this.state.newCart.map((item) => {
-            price += (item.price * item.totalQuantity);
-        });
-        this.setState({price: price})
+        if (this.state.loaded == false) {
+            this.getData();
+            this.setState({loaded: true});
         }
-        */
+        let contents;
+        if (JSON.parse(window.localStorage.getItem('state')).cart.length <= 0) {
+            contents = <p style={{fontWeight: 300, fontSize: "1.2em"}}>Please add more items to the cart.</p>
+        } else {
+            contents = this.state.loading 
+            ? <Loader style={{display: this.state.loading}} type="ThreeDots" color="#000000" height={8} width={60}timeout={3000}/>
+            : Items.renderItems(this.state.items);
+        }
       return (
         <div>
             <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%", marginTop: "30px"}}>
-                {this.state.combinedData.map((item) => 
-                    <ImageItem name={item.name} color={item.color} units={item.totalQuantity} mockupPrice={item.mockupPrice} totalQuantity={item.totalQuantity} sizes={item.sizes} price={item.price} notes={item.notes} image={item.mockup} id={item.id}></ImageItem>
-                )}
+                {contents}
             </div>
         </div>
       )
+    }
+
+    async getData() {
+        const formData = new FormData();
+        var userId = JSON.parse(window.localStorage.getItem('userId'));
+        formData.append('userId', JSON.stringify(userId.userId));
+        const response = await fetch('/api/getUserData', {
+            method: 'POST',
+            body: formData
+        })
+
+        const res = await response.json();
+        console.log(res.Items);
+        this.setState({items: res.Items, loading: false})
     }
   }

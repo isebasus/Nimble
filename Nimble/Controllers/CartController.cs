@@ -31,6 +31,17 @@ namespace nimble.Controllers
             _merch = database.GetCollection<CompanyData>("merch");
         }
 
+        [Route("/api/getUserData")]
+        [HttpPost]
+        public string GetData([FromForm] IFormCollection data)
+        {
+            var id = JsonConvert.DeserializeObject<string>(data["userId"]);
+            var user = _data.Find(user => user.UserId == id).FirstOrDefault();
+            if (user == null) return null;
+            return JsonConvert.SerializeObject(user);
+        }
+
+        
         [Route("/api/uploadNotes")]
         [HttpPost]
         public bool UploadNotes([FromForm] IFormCollection data)
@@ -133,13 +144,13 @@ namespace nimble.Controllers
             var items = JsonConvert.DeserializeObject<Cart[]>(data["data"]);
             foreach (Cart item in items)
             {
-                insertData(item);
+                InsertData(item);
             }
 
             return true;
         }
 
-        private bool insertData(Cart item)
+        private bool InsertData(Cart item)
         {
             Checkout checkout = new Checkout();
             

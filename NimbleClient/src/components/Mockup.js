@@ -92,7 +92,7 @@ export class Items extends React.Component {
     }
 
     pushCheckout() {
-        //this.props.history.push('/checkout');
+        this.props.history.push('/checkout');
         return;
     }
 
@@ -101,6 +101,10 @@ export class Items extends React.Component {
         dict[id] = notes;
 
         this.setState({notes: dict});
+    }
+
+    setMessage(message) {
+        this.setState({checkout: message});
     }
 
     checkout() {
@@ -146,7 +150,7 @@ export class Items extends React.Component {
         <div>
             <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%"}}>
                 {this.state.cart.map((item) => 
-                    <MockupItem setNotes={this.setNotes} name={item.name} color={item.color} notes={item.notes} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
+                    <MockupItem setMessage={this.setMessage.bind(this)} setNotes={this.setNotes} name={item.name} color={item.color} notes={item.notes} units={item.quantity} size={item.size} price={item.price} image={item.image} id={item.id}></MockupItem>
                 )}
                 <h2 className="caption" style={{marginBottom: "0px", fontSize:"2.4rem", marginTop: "0px", textAlign: "left", marginLeft: "5px"}} id="pCaption"><a className="tprice">Total: ${price}</a> <a class="button" style={{float: "right", marginTop: "3px"}} onClick={this.checkout.bind(this)}>{this.state.check}<Loader style={{display: this.state.loading}} type="ThreeDots" color="#000000" height={8} width={60}timeout={3000} /></a></h2>
                 <h2 className="caption" style={{marginBottom: "0px", fontSize:"1rem", color: "rgba(0, 0, 0, 0.58)", marginTop: "0px", textAlign: "right"}} id="pCaption"><a className="tprice">{this.state.checkout}</a></h2>
@@ -203,7 +207,7 @@ export class Items extends React.Component {
         var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
         isUploaded.uploaded = true;
         window.localStorage.setItem('isUploaded', JSON.stringify(isUploaded));
-        //this.setState({loading: "none"}, this.pushCheckout);
+        this.setState({loading: "none"}, this.pushCheckout);
     }
 }
 
