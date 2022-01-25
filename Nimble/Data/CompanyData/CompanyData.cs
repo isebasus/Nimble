@@ -26,6 +26,15 @@ namespace nimble.Data.CompanyData
         
         [BsonElement("print-color-price")]
         public int ColorPrice { get; set; }
+        
+        [BsonElement("max-print-height")]
+        public int MaxPrintHeight { get; set; }
+        
+        [BsonElement("max-print-width")]
+        public int MaxPrintWidth { get; set; }
+        
+        [BsonElement("minimum-units")]
+        public int MinimumUnits { get; set; }
 
     }
 }

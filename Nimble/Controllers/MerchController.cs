@@ -24,9 +24,9 @@ namespace nimble.Controllers
         public MerchController(IMongoClient client)
         {
             IMongoDatabase database = client.GetDatabase("nimble");
-            _data = database.GetCollection<CompanyData>("merch");
-        } 
-
+            _data = database.GetCollection<CompanyData>("customers");
+        }
+        
         [Route("/api/Merch")]
         [HttpPost]
         public ActionResult<IEnumerable<Checkout>> Post([FromForm] IFormCollection data)

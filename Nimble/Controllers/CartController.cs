@@ -41,6 +41,35 @@ namespace nimble.Controllers
             return JsonConvert.SerializeObject(user);
         }
 
+        [Route("/api/removedParsedItem")]
+        [HttpPost]
+        public bool RemoveParsedItem([FromForm] IFormCollection data)
+        {
+            var clientItem = JsonConvert.DeserializeObject<string[]>(data["data"]);
+            string userId = clientItem[0];
+            string merchId = clientItem[1];
+            
+            User user = _data.Find(user => user.UserId == userId).FirstOrDefault();
+            if (user == null) return false;
+            
+            Item item = user.Items.Find(i => i.MerchId == merchId);
+            if (item == null) return false;
+
+            Dictionary<string, List<string>> copy = new Dictionary<string, List<string>>();
+            foreach (KeyValuePair<string, List<string>> entry in user.ItemIds)
+            {
+                if (entry.Value[0] != merchId)
+                {
+                    copy.Add(entry.Key, entry.Value);
+                }
+            }
+            user.ItemIds = copy;
+
+            user.Items.Remove(item);
+            _data.ReplaceOne(x => x.UserId == userId, user);
+            return true;
+        }
+
         
         [Route("/api/uploadNotes")]
         [HttpPost]
@@ -99,7 +128,8 @@ namespace nimble.Controllers
             
             Item item = user.Items.Find(i => i.MerchId == merchId);
             if (item == null) return false;
-            
+
+            item.CartIds.Remove(cartId);
             item.Sizes[size] -= Convert.ToInt32(quantity);
             item.TotalQuantity -= Convert.ToInt32(quantity);
             item.TotalPrice -= Convert.ToInt32(price);
@@ -138,16 +168,25 @@ namespace nimble.Controllers
 
         [Route("/api/addUserItemCart")]
         [HttpPost]
-        public bool Post([FromForm] IFormCollection data)
+        public string Post([FromForm] IFormCollection data)
         {
             // Deserialize item from client cart
             var items = JsonConvert.DeserializeObject<Cart[]>(data["data"]);
+
+            int count = 0;
+            foreach (var item in items)
+            {
+                count += item.quantity;
+            }
+            CompanyData companyData = _merch.Find(company => company.Company == "madmerch").FirstOrDefault();
+            if (count < companyData.MinimumUnits)
+                return JsonConvert.SerializeObject("Please add " + (companyData.MinimumUnits - count) + " more units to the cart to proceed.");
+
             foreach (Cart item in items)
             {
                 InsertData(item);
             }
-
-            return true;
+            return JsonConvert.SerializeObject("successful");
         }
 
         private bool InsertData(Cart item)
@@ -171,6 +210,9 @@ namespace nimble.Controllers
                 cartItem.MockupPrice = checkout.MockupPrice;
                 cartItem.MerchPrice = checkout.TShirtPrice;
                 cartItem.TotalPrice = checkout.TotalPrice;
+
+                cartItem.CartIds = new List<string>();
+                cartItem.CartIds.Add(item.id);
 
                 user.ItemIds = new Dictionary<string, List<string>>();
                 List<string> itemData = new List<string>();
@@ -205,6 +247,7 @@ namespace nimble.Controllers
                     }
                     populateData(items, item, user, checkout);
 
+                    cItem.CartIds.Remove(item.id);
                     cItem.Sizes[item.size] -= item.quantity;
                     cItem.TotalQuantity -= item.quantity;
                     cItem.TotalPrice -= Convert.ToInt32(itemData[3]);
@@ -257,6 +300,9 @@ namespace nimble.Controllers
                 cartItem.MockupPrice = checkout.MockupPrice;
                 cartItem.MerchPrice = checkout.TShirtPrice;
                 cartItem.TotalPrice = checkout.TotalPrice;
+                
+                cartItem.CartIds = new List<string>();
+                cartItem.CartIds.Add(item.id);
                     
                 items.Add(cartItem);
             }
@@ -273,6 +319,7 @@ namespace nimble.Controllers
                 }
                 cartItem.TotalQuantity += item.quantity;
                 cartItem.TotalPrice += checkout.TotalPrice;
+                cartItem.CartIds.Add(item.id);
 
                 if (!user.ItemIds.ContainsKey(item.id))
                 {
@@ -337,11 +384,14 @@ namespace nimble.Controllers
             int foregroundColors = colors.ForegroundColors.Count;
             int imageColors = colors.ImageColors.Count;
 
-            int maximum = Math.Max(Math.Max(backgroundColors, foregroundColors), imageColors);
+            int maximum = Math.Max(foregroundColors, imageColors);
 
             CompanyData companyData = _merch.Find(company => company.Company == "madmerch").FirstOrDefault();
 
-            checkout.MockupPrice = (maximum * companyData.ColorPrice) + companyData.PrintPrice - backgroundColors;
+            int colorPrice = (maximum - backgroundColors) * companyData.ColorPrice;
+            if (colorPrice <= 0) colorPrice = 0;
+            
+            checkout.MockupPrice = colorPrice + companyData.PrintPrice;
             checkout.TotalMockupPrice = item.quantity * checkout.MockupPrice;
 
             Brand brand = companyData.Brands.Find(brand => brand.Name == item.brand);

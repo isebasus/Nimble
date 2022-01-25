@@ -1,37 +1,35 @@
-using System.Collections.Generic;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.Options;
-using nimble.Data.Users.Items;
+using Newtonsoft.Json;
 
-namespace nimble.Data.Users
+namespace nimble.Data.Merch
 {
-    public class User
+    public class UserInformation
     {
-        [BsonId]
-        public ObjectId Id { get; set; }
-        
-        [BsonElement("userId")]
+        [JsonProperty("userId")]
         public string UserId { get; set; }
         
-        [BsonElement("firstName")]
+        [JsonProperty("firstName")]
         public string FirstName { get; set; }
         
-        [BsonElement("lastName")]
+        [JsonProperty("lastName")]
         public string LastName { get; set; }
         
-        [BsonElement("brand")]
+        [JsonProperty("brand")]
         public string Brand { get; set; }
         
         [BsonElement("instagram")]
         public string Instagram { get; set; }
+        
+        [BsonElement("email")]
+        public string Email { get; set; }
+        
         
         [BsonElement("address")]
         public string Address { get; set; }
         
         [BsonElement("city")]
         public string City { get; set; }
-
+        
         [BsonElement("country")]
         public string Country { get; set; }
         
@@ -40,15 +38,5 @@ namespace nimble.Data.Users
         
         [BsonElement("phone")]
         public string Phone { get; set; }
-        
-        [BsonElement("status")]
-        public string Status { get; set; }
-        
-        [BsonElement("itemIds")]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public Dictionary<string, List<string>> ItemIds { get; set; }
-        
-        [BsonElement("items")]
-        public List<Item> Items { get; set; }
     }
 }

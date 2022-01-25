@@ -1,43 +1,16 @@
 import React, { Component, useEffect} from 'react';
 import { projectFirestore, projectStorage } from "../firebase/config";
 
-export default class ImageItem extends Component {
+export default class UserItem extends Component {
     constructor(props) {
         super(props);
         this.state = {notes: ""};
     }
 
-    removeItem() {
-        var parsedData = JSON.parse(window.localStorage.getItem('state'));
-        for (var i = 0; i < parsedData.cart.length; i++) {
-            this.props.cartIds.map((id) => {
-                if (parsedData.cart[i].id == id) {
-                    parsedData.cart.splice(i, 1);
-                }
-            })
-        }
-        this.removeItemBackend(this.props.id);
-    }
-
-    async removeItemBackend(cartId) {
-        var data = [JSON.parse(window.localStorage.getItem('userId')).userId, cartId];
-        const formData = new FormData();
-        formData.append('data', JSON.stringify(data));
-
-        const response = await fetch('/api/removeParsedItem', {
-            method: 'POST',
-            body: formData
-        })
-        const res = await response.json();
-        window.localStorage.reload(false);
-        console.log(res);
-    }
-    
     render() {
-        var price = this.props.mockupPrice + this.props.merchPrice;
         var notes = ""; 
         if (this.props.notes != null) {
-            notes = Object.values(this.props.notes)[0]
+            notes = this.props.notes
         } else {
             notes = "none";
         }
@@ -70,13 +43,9 @@ export default class ImageItem extends Component {
                         <div className="spacer"></div>
                         <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "25px", left: '0px', position: "absolute"}} id="pCaption">{sizeString}</h2>
                         <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "45px", float: "left", marginLeft: "0px", position: "absolute"}} id="pCaption">{this.props.totalQuantity} units</h2>
-                        <h2 className="caption" style={{fontSize: "0.9rem", marginBottom: "0px", textAlign: "left", marginTop: "68px", float: "left", marginLeft: '0px', position: "absolute"}} id="pCaption"><a className="tprice">${this.props.price}</a></h2>
                     </div>
                 </div>
-                
-                <a style={{position: "absolute", top: "25px", right: "20px", fontWeight: "700", opacity: "0.8"}} ><a className="tprice">${this.props.mockupPrice} PER PRINT</a></a>
-                <a style={{position: "absolute", top: "45px", right: "20px", fontWeight: "700", opacity: "0.8"}} ><a className="tprice">${this.props.merchPrice} PER SHIRT</a></a>
-                <h2 className="caption" style={{fontSize:"1rem", color: "rgba(0, 0, 0, 0.80)", width: "40%", textAlign: "left", marginTop: "110px", paddingBottom: "20px", marginBottom: "20px"}} id="pCaption"><a className="tprice">Notes: </a>{notes}</h2>
+                <h2 className="caption" style={{fontSize:"1rem", color: "rgba(0, 0, 0, 0.80)", width: "40%", textAlign: "left", textIndent: "0.7em", marginTop: "110px", paddingBottom: "20px", marginBottom: "20px"}} id="pCaption"><a className="tprice">Notes: </a>{notes}</h2>
             </div>
         );
     }
@@ -85,4 +54,3 @@ export default class ImageItem extends Component {
         return;
     }
 }
-

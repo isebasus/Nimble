@@ -56,7 +56,7 @@ export default class MockupItem extends Component {
                     </div>
                     
                 </div>
-                <input className="inputBox" type="text" placeholder={notes} style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.props.setNotes(this.props.id, event.target.value)}/>
+                <input className="inputBox" type="text" maxLength="80" placeholder={notes} style={{left: '25px', display: 'inline', width: "30%", position: "absolute", top: "140px", textAlign: "left", textIndent: "0.7em"}} onChange={event => this.props.setNotes(this.props.id, event.target.value)}/>
                 <MockupFile id={this.props.id} setMessage={this.props.setMessage}/>
                 <VectorFile id={this.props.id} setMessage={this.props.setMessage}/>
                 <div className="links" style={{marginTop: "50px", position: "absolute", right: "20px", bottom: "-20px"}}>

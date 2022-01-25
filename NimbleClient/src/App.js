@@ -12,6 +12,7 @@ import Header from './components/Header.js';
 import Basket from './components/Basket.js';
 import Mockup from './components/Mockup.js';
 import Checkout from './components/Checkout.js';
+import Order from './components/Orders/Order.js';
 import './styles/App.css';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path={"/alstyle-apparel"} component={Merch}></Route>
           <Route path={"/add-mockups"} component={Mockup}></Route>
           <Route path={"/checkout"} component={Checkout}></Route>
+          <Route path={"/orders:id"} component={Order}></Route>
         </Switch>
       </div>
     </Router>

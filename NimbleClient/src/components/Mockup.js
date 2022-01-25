@@ -107,6 +107,22 @@ export class Items extends React.Component {
         this.setState({checkout: message});
     }
 
+    generateUUID() { // Public Domain/MIT
+        var d = new Date().getTime();//Timestamp
+        var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16;//random number between 0 and 16
+            if(d > 0){//Use timestamp until depleted
+                r = (d + r)%16 | 0;
+                d = Math.floor(d/16);
+            } else {//Use microseconds since page-load if supported
+                r = (d2 + r)%16 | 0;
+                d2 = Math.floor(d2/16);
+            }
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
     checkout() {
         var count = 0;
         var parsedData = JSON.parse(window.localStorage.getItem('state'));
@@ -132,7 +148,7 @@ export class Items extends React.Component {
         }
         this.setState({loading: "block", check: ""});
         if (count == parsedData.cart.length) {
-            this.sendData(parsedData);
+            this.sendData();
             return;
         }
         
@@ -161,15 +177,18 @@ export class Items extends React.Component {
     }
 
     async sendData(data) {
+        var data = JSON.parse(window.localStorage.getItem('state'));
         const formData = new FormData();
         for (var i = 0; i < data.cart.length; i++) {
             if (data.cart[i].mockupUploaded == false && data.cart[i].vectorUploaded == false) {
                 return;
             }
         }
+
+        var uuid = this.generateUUID();
         if (window.localStorage.getItem('userId') == null) {
             var data = {
-                "userId": this.generateUUID()
+                "userId": uuid
             }
             window.localStorage.setItem('userId', JSON.stringify(data));
         }
@@ -186,9 +205,16 @@ export class Items extends React.Component {
             body: cartData
         })
         const res = await response.json();
+        if (res != "successful") {
+            this.setState({checkout: res, loading: "none", check: "Checkout"});
+            var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
+            isUploaded.uploaded = false;
+            window.localStorage.setItem('isUploaded', JSON.stringify(isUploaded));
+            return;
+        }
         console.log(res);
 
-        /*
+        
         var serializedData = []
         for (var cartId in this.state.notes) {
             var d = [cartId, this.state.notes[cartId]];
@@ -197,13 +223,13 @@ export class Items extends React.Component {
 
         formData.append('data', JSON.stringify(serializedData));
         formData.append('userId', JSON.stringify(JSON.parse(window.localStorage.getItem('userId')).userId));
-        const response = await fetch('/api/uploadNotes', {
+        const response1 = await fetch('/api/uploadNotes', {
             method: 'POST',
             body: formData
         })
-        const res = await response.json();
-        console.log(res);
-        */
+        const res1 = await response1.json();
+        console.log(res1);
+    
         var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
         isUploaded.uploaded = true;
         window.localStorage.setItem('isUploaded', JSON.stringify(isUploaded));

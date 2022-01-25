@@ -35,6 +35,9 @@ namespace nimble.Data.Users.Items
         
         [BsonElement("totalPrice")]
         public int TotalPrice { get; set; }
+        
+        [BsonElement("cartIds")]
+        public List<string> CartIds { get; set; }
 
         [BsonElement("notes")]
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
