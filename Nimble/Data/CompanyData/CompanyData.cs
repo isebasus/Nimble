@@ -35,6 +35,9 @@ namespace nimble.Data.CompanyData
         
         [BsonElement("minimum-units")]
         public int MinimumUnits { get; set; }
+        
+        [BsonElement("ratings")]
+        public int Ratings { get; set; }
 
     }
 }

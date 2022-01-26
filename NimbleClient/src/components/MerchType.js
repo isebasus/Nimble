@@ -17,7 +17,7 @@ export default class MerchType extends Component {
                         <a onClick={this.search.bind(this)} class="infoIcon" id="i" >
                             <img id="infoIconChild" src="https://img.icons8.com/ios-glyphs/35/000000/info.png"/>
                         </a>
-                        <div onClick={this.props.path} className="cover" id={this.props.coverId}></div>
+                        <div onClick={this.props.path} className="cover" id="coverScraper"></div>
                     </div>
                 </div>
                 <div className="projectName">

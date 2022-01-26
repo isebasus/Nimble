@@ -9,7 +9,7 @@ import qwertyVideo from '../src/videos/qwertyVideo.mp4';
 import Description from './components/jsx/Description.js';
 import {FetchData} from './components/FetchData.js';
 import Header from './components/Header.js';
-import Basket from './components/Basket.js';
+import Partners from './components/Partners/Partners.js';
 import Mockup from './components/Mockup.js';
 import Checkout from './components/Checkout.js';
 import Order from './components/Orders/Order.js';
@@ -27,6 +27,7 @@ function App() {
           <Route path={"/gildan-apparel"} component={Merch}></Route>
           <Route path={"/comfort-colors-apparel"} component={Merch}></Route>
           <Route path={"/alstyle-apparel"} component={Merch}></Route>
+          <Route path={"/partners"} component={Partners}></Route>
           <Route path={"/add-mockups"} component={Mockup}></Route>
           <Route path={"/checkout"} component={Checkout}></Route>
           <Route path={"/orders:id"} component={Order}></Route>

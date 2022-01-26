@@ -61,12 +61,7 @@ export default class Description extends Component {
                     <a class="sizeButton" style={{marginRight: '10px', display: 'inline'}} onClick={this.addToBag.bind(this)}>{this.state.added}</a>
                 </div>
                 <h2 className="caption" style={{marginBottom: '0px', fontSize: '20px', marginTop:'30px'}} id="pCaption">{this.state.error}</h2>
-                <h3 id="t-description" classNamclassName="projectDescription">{this.props.p1}</h3>
-                <h3 id="t-description" className="projectDescription">{this.props.p2}</h3>
-                <h3 id="t-description" className="projectDescription">{this.props.p2b}</h3>
-                <h3 id="t-description" className="projectDescription">{this.props.p3}<a class={this.props.clas} href={this.props.href}>{this.props.details}</a>{this.props.p3b}</h3>
-                <h3 id="t-description" className="projectDescription"></h3>
-                <h3 id="t-description" className="projectDescription"></h3>
+                <h3 id="t-description" className="projectDescription" style={{fontWeight: "700", opacity: "0.8", textIndent: "1em"}}>{this.props.p1}</h3>
             </div>
         )
     }

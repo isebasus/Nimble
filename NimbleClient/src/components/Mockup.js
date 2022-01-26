@@ -178,7 +178,6 @@ export class Items extends React.Component {
 
     async sendData(data) {
         var data = JSON.parse(window.localStorage.getItem('state'));
-        const formData = new FormData();
         for (var i = 0; i < data.cart.length; i++) {
             if (data.cart[i].mockupUploaded == false && data.cart[i].vectorUploaded == false) {
                 return;
@@ -221,6 +220,7 @@ export class Items extends React.Component {
             serializedData.push(d);
         }
 
+        const formData = new FormData();
         formData.append('data', JSON.stringify(serializedData));
         formData.append('userId', JSON.stringify(JSON.parse(window.localStorage.getItem('userId')).userId));
         const response1 = await fetch('/api/uploadNotes', {
