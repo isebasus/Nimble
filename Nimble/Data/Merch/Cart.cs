@@ -43,5 +43,8 @@ namespace nimble.Data.Merch
 
         [JsonProperty("userId")]
         public string userId { get; set; }
+        
+        [JsonProperty("company")]
+        public string company { get; set; }
     }
 }

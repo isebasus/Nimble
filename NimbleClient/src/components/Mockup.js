@@ -16,7 +16,6 @@ export default class Mockup extends Component {
             if (window.localStorage.getItem('state') == null) {
                 return;
             }
-
             if (JSON.parse(window.localStorage.getItem('state')).cart.length > 0) {
                 this.setState(JSON.parse(window.localStorage.getItem('state')));
             } else {
@@ -60,7 +59,6 @@ export class Items extends React.Component {
 
     constructor(props) {
         super(props);
-        
         var data = JSON.parse(window.localStorage.getItem('state'));
         data.checkout = "";
         data.loading = "none";
@@ -69,7 +67,6 @@ export class Items extends React.Component {
         this.state = data || {
             cart: []
         }
-
         this.setNotes = this.setNotes.bind(this);
     }
 
@@ -213,7 +210,7 @@ export class Items extends React.Component {
         }
         console.log(res);
 
-        
+        /*
         var serializedData = []
         for (var cartId in this.state.notes) {
             var d = [cartId, this.state.notes[cartId]];
@@ -229,6 +226,7 @@ export class Items extends React.Component {
         })
         const res1 = await response1.json();
         console.log(res1);
+        */
     
         var isUploaded = JSON.parse(window.localStorage.getItem('isUploaded'));
         isUploaded.uploaded = true;

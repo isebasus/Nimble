@@ -43,7 +43,7 @@ export default class MockupItem extends Component {
         return (
             <div className="item" style={{cursor: "default", height: '200px', position: "relative", width: "100%"}} onClick={this.visitPage.bind(this)}>
                 <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block", height: "100%", position: "relative", width: "100%"}}>
-                    <div className="box" style={{width: "20%", height: "100px", objectFit: "cover", borderRadius: "10px", display: "inline", textAlign: "left", marginBottom: "0px", left: "0px", marginRight: "10px", float: "left"}} id={this.props.image}></div>
+                <div className="box" style={{width: "20%", height: "100px", objectFit: "cover", borderRadius: "5px", display: "inline", textAlign: "left", marginBottom: "0px", left: "0px", marginRight: "10px", float: "left", backgroundImage: `url(${this.props.image})`}}></div>
                     <div style={{position: "relative", display: "inline", float: 'left', width: "300x", height: "100%"}}>
                         <div style={{paddingBottom: "0px", paddingLeft: "0px", display: "block"}}>
                             <h2 className="caption" style={{fontSize: "1rem", marginBottom: "0px", textAlign: "left", marginTop: "0px", display: "inline", float: "left", marginRight: "10px", fontWeight: "700"}} id="pCaption">{this.props.name}</h2>

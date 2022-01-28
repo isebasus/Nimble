@@ -47,6 +47,40 @@ namespace nimble.Controllers
             return JsonConvert.SerializeObject(info);
         }
 
+        [Route("/api/getProductionCompany")]
+        [HttpPost]
+        public string GetProductionCompany([FromForm] IFormCollection data)
+        {
+            string name = JsonConvert.DeserializeObject<string>(data["name"]);
+            CompanyData company = _data.Find(x => x.Link == name).FirstOrDefault();
+            
+            if (company == null)
+            {
+                return JsonConvert.SerializeObject("Error: Cannot find Company.");
+            }
+            return JsonConvert.SerializeObject(company);
+        }
+
+        [Route("/api/getProductionMerch")]
+        [HttpPost]
+        public string GetMerch([FromForm] IFormCollection data)
+        {
+            string name = JsonConvert.DeserializeObject<string>(data["name"]);
+            string merch = JsonConvert.DeserializeObject<string>(data["merch"]);
+            
+            CompanyData company = _data.Find(x => x.Link == name).FirstOrDefault();
+            if (company == null)
+            {
+                return JsonConvert.SerializeObject("Error: Cannot find Company.");
+            }
+
+            var brand = company.Brands.Find(x => x.Link == merch);
+            if (brand == null)
+            {
+                return JsonConvert.SerializeObject("Error: Cannot find Company.");
+            }
+            return JsonConvert.SerializeObject(brand);
+        }
     }
 }
 

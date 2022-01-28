@@ -41,9 +41,12 @@ export default class Description extends Component {
     render() {
         return(
             <div className="descriptionBody">
-                <h1 className="first2" id="title" style={{marginBottom: "10px"}}>{this.props.name}</h1>
-                <h2 className="caption" style={{marginBottom: "10px", fontSize:"2.4rem", color: "rgba(0, 0, 0, 0.58)"}} id="pCaption"><a className="tprice">＄{this.props.price} USD / SHIRT</a></h2>
-                <div className="box" id={this.props.image}></div>
+                <div className="links" style={{marginTop: "20px", marginBottom: "-20px"}}>
+                    <a className="li" onClick={this.goBack.bind(this)}>&larr; Back</a>
+                </div>
+                <h1 className="first2" id="title" style={{marginBottom: "0px", marginTop: "30px"}}>{this.props.name}</h1>
+                <div className="box" style={{backgroundImage: `url(${this.props.image})`, marginTop: "-50px"}}></div>
+                <h2 className="caption" style={{fontSize:"2.4rem", color: "rgba(0, 0, 0, 0.58)", marginBottom: "40px", marginTop: "-100px"}} id="pCaption"><a className="tprice">＄{this.props.price} USD / SHIRT</a></h2>
                 <div className="centerColors">
                     {this.props.sizes.map((size, i) => 
                         <a class={this.state.buttonSizeState[i]} onClick={this.setSize.bind(this, size, i)}>{size}</a>
@@ -119,7 +122,8 @@ export default class Description extends Component {
             "image": this.props.image,
             "price": this.props.price,
             "mockupUploaded": false,
-            "vectorUploaded": false
+            "vectorUploaded": false,
+            "company": this.props.company
         }
         this.setWindowState(data);
         this.setState({added: "Added!"});

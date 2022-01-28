@@ -15,8 +15,14 @@ namespace nimble.Data.CompanyData
         [BsonElement("description")]
         public string Description { get; set; }
         
+        [BsonElement("link")]
+        public string Link { get; set; }
+        
         [BsonElement("logo")]
         public string Logo { get; set; }
+        
+        [BsonElement("profile-picture")]
+        public string ProfilePicture { get; set; }
         
         [BsonElement("brands")]
         public List<Brand.Brand> Brands { get; set; }
@@ -37,7 +43,7 @@ namespace nimble.Data.CompanyData
         public int MinimumUnits { get; set; }
         
         [BsonElement("ratings")]
-        public int Ratings { get; set; }
+        public double Ratings { get; set; }
 
     }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ShoppingCart from './ShoppingCart.js';
+import ShoppingCart from './ShoppingCart/ShoppingCart.js';
 
 export default class Header extends Component {
     constructor(props) {

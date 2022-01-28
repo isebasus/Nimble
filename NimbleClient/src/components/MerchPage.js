@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import TShirtType from './TShirtTypes.js';
 import Description from './jsx/Description.js';
-import qwertyVideo from '../videos/qwertyVideo.mp4';
 import data from "../data/data.json";
 import Header from './Header.js';
 
@@ -46,7 +45,6 @@ export class MerchPage extends Component{
         })
         var items = <Description
           id={data.id} 
-          video={qwertyVideo} 
           name={name}
           caption={caption}
           p1={p1}

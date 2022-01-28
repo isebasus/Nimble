@@ -11,6 +11,9 @@ namespace nimble.Data.CompanyData.Brand
         [BsonElement("caption")]
         public string Caption { get; set; }
         
+        [BsonElement("link")]
+        public string Link { get; set; }
+        
         [BsonElement("image")]
         public string Image { get; set; }
         

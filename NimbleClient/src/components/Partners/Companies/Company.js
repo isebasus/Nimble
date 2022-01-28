@@ -8,8 +8,8 @@ export default class Company extends Component {
         var companyName = this.props.name.toUpperCase();
         var description = this.props.description.toUpperCase();
         return (
-            <div id="parentContainer" style={{color: '-webkit-link', cursor: 'pointer'}}>
-                <div className="parent" style={{backgroundImage: `url(${this.props.image})`, maxHeight: "280px"}}>
+            <div id="parentContainer" style={{color: '-webkit-link', cursor: 'pointer'}} onClick={this.search.bind(this, this.props.name)}>
+                <div className="parent" style={{backgroundImage: `url(${this.props.image})`, maxHeight: "280px", objectFit: "cover"}}>
                     <div className="project">
                         <div className="cover" id="coverScraper"></div>
                     </div>
@@ -21,7 +21,8 @@ export default class Company extends Component {
         );
     }
 
-    search(e){
-        this.props.history.push(this.props.matchPath);
+    search(companyName){
+        var newName = companyName.replace(/[^A-Z0-9]/ig, "_").toLowerCase();
+        this.props.history.push('/production-companies?path=' + newName);
     }
 }

@@ -178,7 +178,7 @@ namespace nimble.Controllers
             {
                 count += item.quantity;
             }
-            CompanyData companyData = _merch.Find(company => company.Company == "madmerch").FirstOrDefault();
+            CompanyData companyData = _merch.Find(company => company.Company == items[0].company).FirstOrDefault();
             if (count < companyData.MinimumUnits)
                 return JsonConvert.SerializeObject("Please add " + (companyData.MinimumUnits - count) + " more units to the cart to proceed.");
 
@@ -386,7 +386,7 @@ namespace nimble.Controllers
 
             int maximum = Math.Max(foregroundColors, imageColors);
 
-            CompanyData companyData = _merch.Find(company => company.Company == "madmerch").FirstOrDefault();
+            CompanyData companyData = _merch.Find(company => company.Company == item.company).FirstOrDefault();
 
             int colorPrice = (maximum - backgroundColors) * companyData.ColorPrice;
             if (colorPrice <= 0) colorPrice = 0;

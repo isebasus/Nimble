@@ -12,6 +12,6 @@ namespace nimble.Data.CompanyData
         
         public int MinimumUnits { get; set; }
         
-        public int Ratings { get; set; }
+        public double Ratings { get; set; }
     }
 }
