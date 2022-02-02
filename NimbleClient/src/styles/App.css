@@ -511,16 +511,6 @@ video{
   cursor: pointer;
 }
 
-
-
-#videoScraper{
-  background-image: url(../images/videoScraper.jpeg);
-}
-
-#foodBanks{
-  background-image: url(../images/food.JPG);
-}
-
 #res{
   color: #f5576c;
   text-decoration: none;
@@ -567,10 +557,6 @@ img{
 
 .contact:hover{
   color: rgba(255, 255, 255, 1);
-}
-
-#qwerty{
-  background-image: url(../../src/images/qwerty.png);
 }
 
 #text{
