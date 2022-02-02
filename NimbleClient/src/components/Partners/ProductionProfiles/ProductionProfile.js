@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import Header from '../../Header.js';
 import Loader from "react-loader-spinner";
 import {useLocation} from "react-router-dom";
-import MerchType from '../../MerchType.js';
+import MerchType from './MerchType.js';
 import ProfileHeader from '../ProfileHeader/ProfileHeader.js';
 
 export default class ProductionProfile extends Component{
@@ -59,7 +59,7 @@ export default class ProductionProfile extends Component{
             }
 
             contents = this.state.loading 
-            ? <Loader style={{display: this.state.loading}} type="ThreeDots" color="#000000" height={8} width={60}timeout={3000}/>
+            ? <Loader style={{display: this.state.loading, marginTop: "200px"}} type="ThreeDots" color="#000000" height={20} width={60}timeout={3000}/>
             : ProductionProfile.renderProfile(this.state.items, this.state.notFound, pathArr, this.props.history);
         }
         return (

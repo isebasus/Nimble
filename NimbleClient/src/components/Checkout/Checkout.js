@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../Header.js';
-import ImageItem from '../ImageItem.js';
+import ImageItem from './ImageItem.js';
 import Loader from "react-loader-spinner";
 
 
@@ -65,37 +65,21 @@ export class Items extends React.Component {
         clearInterval(this.interval);
     }
 
-    setFirstName(firstName) {
-        this.setState({firstName: firstName});
-    }
+    setFirstName(firstName) { this.setState({firstName: firstName});}
 
-    setLastName(lastName) {
-        this.setState({lastName: lastName});
-    }
+    setLastName(lastName) {this.setState({lastName: lastName});}
 
-    setAddress(address) {
-        this.setState({address: address});
-    }
+    setAddress(address) {this.setState({address: address})}
 
-    setStateInfo(state) {
-        this.setState({state: state});
-    }
+    setStateInfo(state) {this.setState({state: state})}
 
-    setCountry(country) {
-        this.setState({country: country});
-    }
+    setCountry(country) {this.setState({country: country})}
     
-    setZip(zip) {
-        this.setState({zip: zip});
-    }
+    setZip(zip) {this.setState({zip: zip})}
 
-    setEmail(email) {
-        this.setState({email: email});
-    }
+    setEmail(email) {this.setState({email: email})}
 
-    setPhone(phone) {
-        this.setState({phone: phone});
-    }
+    setPhone(phone) {this.setState({phone: phone})}
 
     validateEmail(email) {
         return String(email)

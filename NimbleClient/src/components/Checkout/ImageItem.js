@@ -1,5 +1,4 @@
 import React, { Component, useEffect} from 'react';
-import { projectFirestore, projectStorage } from "../firebase/config";
 
 export default class ImageItem extends Component {
     constructor(props) {

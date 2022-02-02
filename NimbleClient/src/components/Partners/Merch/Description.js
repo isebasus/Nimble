@@ -45,8 +45,8 @@ export default class Description extends Component {
                     <a className="li" onClick={this.goBack.bind(this)}>&larr; Back</a>
                 </div>
                 <h1 className="first2" id="title" style={{marginBottom: "0px", marginTop: "30px"}}>{this.props.name}</h1>
-                <div className="box" style={{backgroundImage: `url(${this.props.image})`, marginTop: "-50px"}}></div>
-                <h2 className="caption" style={{fontSize:"2.4rem", color: "rgba(0, 0, 0, 0.58)", marginBottom: "40px", marginTop: "-100px"}} id="pCaption"><a className="tprice">＄{this.props.price} USD / SHIRT</a></h2>
+                <div className="box" style={{backgroundImage: `url(${this.props.image})`, marginTop: "-50px", objectFit: "contain", maxWidth: "100%", maxHeight: "100%"}}></div>
+                <div style={{width: "100%", marginLeft: "78px", opacity: 1, marginTop: "83px"}}><h2 className="caption" style={{fontSize:"2.4rem", color: "rgba(0, 0, 0, 0.58)", marginBottom: "40px", marginTop: "-130px", opacity: 1}} id="pCaption" id="highlight"><a className="tprice" style={{color: "#ffffff", opacity: 1, fontSize: "0.85em"}}>＄{this.props.price} USD / {this.props.type}</a></h2></div>
                 <div className="centerColors">
                     {this.props.sizes.map((size, i) => 
                         <a class={this.state.buttonSizeState[i]} onClick={this.setSize.bind(this, size, i)}>{size}</a>

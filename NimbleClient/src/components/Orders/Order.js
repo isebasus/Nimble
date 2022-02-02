@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../Header.js';
-import ImageItem from '../ImageItem.js';
+import ImageItem from '../Checkout/ImageItem.js';
 import UserItem from './UserItems/UserItems.js';
 import Loader from "react-loader-spinner";
 import { useParams } from 'react-router';

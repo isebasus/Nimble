@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Header from './Header.js';
+import Header from '../Header.js';
 import MockupItem from './MockupItem';
 import Loader from "react-loader-spinner";
 

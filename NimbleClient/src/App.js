@@ -1,19 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link, useLocation} from "react-router-dom";
-import BlankDescription from './components/jsx/BlankDescription.jsx';
-import MerchType from './components/MerchType.js';
 import { createBrowserHistory, createHashHistory } from 'history';
-import { MerchPage } from './components/MerchPage.js';
-import Description from './components/jsx/Description.js';
-import {FetchData} from './components/FetchData.js';
 import Header from './components/Header.js';
 import Partners from './components/Partners/Partners.js';
-import Mockup from './components/Mockup.js';
+import Mockup from './components/Mockup/Mockup.js';
 import Checkout from './components/Checkout/Checkout.js';
 import Order from './components/Orders/Order.js';
 import ProductionProfile from './components/Partners/ProductionProfiles/ProductionProfile.js';
 import Blanks from './components/Partners/Blanks/Blanks.js';
 import Merch from './components/Partners/Merch/Merch.js';
+import SignIn from './components/User/SignIn.js';
 import './styles/App.css';
 
 function App() {
@@ -29,6 +25,7 @@ function App() {
           <Route path={"/production-companies"} component={ProductionProfile}></Route>
           <Route path={"/production-brands"} component={Blanks}></Route>
           <Route path={"/production-merch"} component={Merch}></Route>
+          <Route path={"/sign-in"} component={SignIn}></Route>
         </Switch>
       </div>
     </Router>

@@ -419,59 +419,6 @@ h2{
   background-repeat: none;
 }
 
-#pacman{
-  background-image: url(../../src/images/pac.JPG);
-}
-
-#composter{
-  background-image: url(../../src/images/compost.JPG);
-}
-
-#rapter{
-  background-image: url(../../src/images/rap.jpeg);
-}
-
-#pong{
-  background-image: url(../../src/images/pongg.JPG);
-}
-
-#archive{
-  background-image: url(../../src/images/archive.png);
-}
-
-#hamming{
-  background-image: url(../../src/images/hamming.png);
-}
-
-#gildan{
-  background-image: url(../../src/images/gildan.jpeg);
-}
-
-#laa {
-  background-image: url(../../src/images/LAA.png);
-}
-
-#comfortColors {
-  background-image: url(../../src/images/comfortColors.png);
-}
-
-#alstyle {
-  background-image: url(../../src/images/alstyle.jpeg);
-}
-
-#laaGarments {
-  background-image: url(../../src/images/laapparelgarments.jpeg);
-}
-
-#gildanGarments {
-  background-image: url(../../src/images/gildanMerch.jpeg);
-}
-
-#laaLogo {
-  background-image: url(../../src/images/laahoodie.png);
-}
-
-
 .columns{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -669,6 +616,17 @@ a{
   margin-top: 100px;
 }
 
+#highlight {
+  height: 100%;
+  transform-origin: right top;
+  background-color: black;
+  border-radius: 3px;
+  width: fit-content;
+  padding: 0px 5px;
+  margin: 0;
+  z-index: 100;
+}
+
 .button{
   padding: 12px 20px;
     display: flex;
@@ -688,6 +646,24 @@ a{
     font-weight: 700;
     margin-top: -30px;
     transition: all .15s ease 0s;
+}
+
+.loginButton {
+  display: block;
+    background: linear-gradient(35deg,#ff4cff,#ff813d);
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: center;
+    width: 170px;
+    padding: 10px;
+    margin: -45px auto 50px;
+    text-decoration: none;
+    border-radius: 4px;
+    line-height: 1.4;
+    transition: all .15s ease 0s;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
 }
 
 .quality {
@@ -856,10 +832,14 @@ input::-webkit-inner-spin-button {
   padding-left: 15px;
 }
 
-.button:hover, .aboutButton:hover{
+.button:hover, .aboutButton:hover, .loginButton:hover{
     -webkit-transform: translateY(-1.5px);
     -ms-transform: translateY(-1.5px);
     transform: translateY(-1.5px);
+}
+
+input:focus, textarea:focus, select:focus{
+  outline: none;
 }
 
 .aboutButton{

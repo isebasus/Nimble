@@ -118,7 +118,7 @@ namespace nimble.Controllers
 
             User user = _data.Find(user => user.UserId == userId).FirstOrDefault();
             if (user == null) return false;
-            if (user.ItemIds[cartId] == null) return false;
+            if (!user.ItemIds.ContainsKey(cartId)) return false;
             
             List<string> itemData = user.ItemIds[cartId];
             string merchId = itemData[0];

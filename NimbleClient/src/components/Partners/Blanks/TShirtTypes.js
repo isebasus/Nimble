@@ -12,7 +12,7 @@ export default class TShirtType extends Component {
     render() {
         return (
             <div id="parentContainer" style={{color: '-webkit-link', cursor: 'pointer'}} onClick={this.search.bind(this)}>
-                <div className="parent" style={{backgroundImage: `url(${this.props.image})`, objectFit: "cover"}}>
+                <div className="parent" style={{backgroundImage: `url(${this.props.image})`, objectFit: "contain", backgroundSize: "cover"}}>
                     <div className="project">
                         <a class="infoIcon" id="i" >
                             <img id="infoIconChild" src="https://img.icons8.com/ios-glyphs/35/000000/info.png"/>

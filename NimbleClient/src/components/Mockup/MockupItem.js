@@ -1,5 +1,5 @@
 import React, { Component, useEffect} from 'react';
-import { projectFirestore, projectStorage } from "../firebase/config";
+import { projectFirestore, projectStorage } from "../../firebase/config";
 
 export default class MockupItem extends Component {
     constructor(props) {

@@ -2,8 +2,7 @@ import React, { Component} from 'react';
 import Header from '../../Header.js';
 import Loader from "react-loader-spinner";
 import ProfileHeader from '../ProfileHeader/ProfileHeader.js';
-import TShirtType from '../../TShirtTypes.js';
-import Description from '../../jsx/Description.js';
+import Description from './Description.js';
 
 export default class ProductionProfile extends Component{
     constructor(props) {
@@ -20,7 +19,7 @@ export default class ProductionProfile extends Component{
                     <div class="basketItems" style={{gridTemplateColumns: "repeat(1, 1fr)", gap: "15px 15px", overflow: "hidden", opacity: "1", right: "0px", position: "relative", width: "100%", marginTop: "20px", backgroundColor: "rgba(0, 0, 0, 0.065)"}}>
                         <ProfileHeader image={items.Logo} name={items.Company} maxHeight={"145px"} description={items.Description} ratings={items.Ratings} profilePicture={items.ProfilePicture}></ProfileHeader> 
                     </div>
-                    <Description company={items.Company} name={merch.Name} caption={caption} colors={merch.Colors} image={merch.Image} sizes={merch.Sizes} brand={brand} history={history} price={merch.Price}></Description>
+                    <Description company={items.Company} name={merch.Name} caption={caption} colors={merch.Colors} image={merch.Image} sizes={merch.Sizes} brand={brand} history={history} price={merch.Price} type={merch.Type}></Description>
                    </div>
         }
         return (
@@ -53,7 +52,7 @@ export default class ProductionProfile extends Component{
                 }
     
                 contents = this.state.loading 
-                ? <Loader style={{display: this.state.loading}} type="ThreeDots" color="#000000" height={8} width={60}timeout={3000}/>
+                ? <Loader style={{display: this.state.loading, marginTop: "200px"}} type="ThreeDots" color="#000000" height={20} width={60}timeout={3000}/>
                 : ProductionProfile.renderProfile(this.state.items, this.state.notFound, pathArr, this.props.history, this.state.merch, this.state.brand, this.state.caption);
             }
         }
