@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.2.1",
     "@toast-ui/editor": "^3.0.3",
     "axios": "^0.23.0",
+    "core-js": "^3.21.0",
     "firebase": "^9.6.1",
     "history": "^4.10.1",
     "http-proxy-middleware": "^2.0.2",
